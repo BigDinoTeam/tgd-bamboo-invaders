@@ -15,7 +15,7 @@ public class Cell {
 
 	private static Image[] bamboos;
 	private static String[] names;
-	private static Image[] backgrounds;
+	private static String[] backgrounds;
 	private static boolean[] fertilities;
 	private static int[][] bambooThresholds;
 	private static float[][] bambooGaugeCoefficients; // Effet de cette case sur les cases adjacentes
@@ -31,7 +31,7 @@ public class Cell {
 		} catch (JSONException error) {}
 		int length = array.length();
 		String[] names = new String[length];
-		Image[] backgrounds = new Image[length];
+		String[] backgrounds = new String[length];
 		boolean[] fertilities = new boolean[length];
 		int[][] bambooThresholds = new int[length][];
 		float[][] bambooGaugeCoefficients = new float[length][];
@@ -51,7 +51,7 @@ public class Cell {
 			try {
 				background = object.getString("background");
 			} catch (JSONException error) {}
-			backgrounds[i] = AppLoader.loadPicture(background);
+			backgrounds[i] = background;
 			try {
 				object = array.getJSONObject(i);
 			} catch (JSONException error) {}
@@ -115,11 +115,13 @@ public class Cell {
 	}
 
 	private int type;
+	private Image background;
 	private int bambooStage;
 	private int bambooGauge;
 
 	public Cell(int type) {
 		this.type = type;
+		this.background = AppLoader.loadPicture(backgrounds[type]);
 		this.bambooStage = 0;
 		this.bambooGauge = 0;
 	}
@@ -159,15 +161,19 @@ public class Cell {
 	}
 
 	public int getType() {
-		return type;
+		return this.type;
+	}
+
+	public Image getBackground(){
+		return this.background;
 	}
 
 	public int getBambooStage() {
-		return bambooStage;
+		return this.bambooStage;
 	}
 
 	public int getBambooGauge() {
-		return bambooGauge;
+		return this.bambooGauge;
 	}
 
 	public static int getSize(){
@@ -180,10 +186,6 @@ public class Cell {
 
 	public static int getHeight(){
 		return 2 * size;
-	}
-
-	public Image getBackground(){
-		return backgrounds[this.type];
 	}
 
 }

@@ -4,27 +4,27 @@
 		"name": "Nid",
 		"background": "/images/bambooInvaders/cells/nid.png",
 		"dino_action_duration": 300,
-		"dino_speed_coefficients": [1, .7, .25]
-	}
+		"dino_speed_coefficients": [1, .75, .25]
+	},
 	{
 		"id": 1,
 		"name": "Sable",
 		"background": "/images/bambooInvaders/cells/sable.png",
 		"dino_action_duration": 500,
-		"dino_speed_coefficients": [1, .7, .25]
-	}
+		"dino_speed_coefficients": [1, .75, .25]
+	},
 	{
 		"id": 2,
 		"name": "Herbe",
 		"background": "/images/bambooInvaders/cells/herbe.png",
 		"dino_action_duration": 300,
-		"dino_speed_coefficients": [1, .7, .25]
-	}
+		"dino_speed_coefficients": [1, .75, .25]
+	},
 	{
-		"id": 2,
+		"id": 3,
 		"name": "Eau",
 		"background": "/images/bambooInvaders/cells/eau.png",
 		"dino_action_duration": 1500,
-		"dino_speed_coefficients": [1, .7, .25]
+		"dino_speed_coefficients": [1, .75, .25]
 	}
 ]

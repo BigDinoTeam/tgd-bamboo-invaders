@@ -1,4 +1,4 @@
-package games.test;
+package games.bambooInvaders;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;

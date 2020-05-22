@@ -51,4 +51,5 @@ public class Cell {
 	public float getActionCountdownCoefficient(){
 		return actionCountdownCoefficient.get(this.type);
 	}
+
 }

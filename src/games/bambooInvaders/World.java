@@ -1,5 +1,7 @@
 package games.bambooInvaders;
 
+import java.util.ArrayList;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -13,6 +15,7 @@ public class World extends BasicGameState {
 	private int ID;
 	private int state;
 	private Grid grid;
+	private ArrayList<Dino> dinos;
 
 	public World(int ID) {
 		this.ID = ID;
@@ -27,6 +30,7 @@ public class World extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au chargement du programme */
+		this.dinos = new ArrayList<Dino>();
 	}
 
 	@Override
@@ -59,16 +63,24 @@ public class World extends BasicGameState {
 			game.enterState(2, new FadeOutTransition(), new FadeInTransition());
 		}
 		this.grid.update(container, game, delta);
+		for (Dino dino : dinos) {
+			dino.update(container, game, delta);
+		}
 	}
 
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		grid.render(container, game, context);
+		for (Dino dino : dinos) {
+			dino.render(container, game, context);
+		}
 	}
 
 	public void play(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au début du jeu */
+		// TODO : choix du nombre de joueurs et points de spawn
+		dinos.add(new Dino(grid, 0, 0));
 	}
 
 	public void pause(GameContainer container, StateBasedGame game) {

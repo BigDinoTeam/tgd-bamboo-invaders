@@ -1,11 +1,17 @@
 package games.bambooInvaders;
 
+import java.awt.Point;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
+import app.AppLoader;
+
 public class Dino {
+	
+	private Image dino;
 	
 	private int bambooCounter;
 	private int actionCountdown;
@@ -28,22 +34,26 @@ public class Dino {
 		this.bambooCounter = 0;
 		this.timeRegurgitating = 0;
 		this.isRegurgitating = false;
+		this.dino = AppLoader.loadPicture("/images/bambooInvaders/dino.png");
 	}
 	
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		// TODO : valider le système de score
 		this.score += delta;
 		
 		this.actionCountdown -= delta;
 		if (this.actionCountdown <= 0) this.actionCountdown = checkInput(container,delta); 
-		
 	}
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
+		Point p = Grid.getHexagonCenter(i, j);
 		
-		// TODO : render le Dino sur la case où il se trouve
+		context.drawImage(
+					dino, 
+					(float) p.getX() - Cell.getWidth()/3, (float) p.getY() - Cell.getHeight()/3, (float) p.getX() + Cell.getWidth()/3, (float) p.getY() + Cell.getHeight()/3, 
+					0, 0, dino.getWidth(), dino.getHeight()
+				);
 		
 		// TODO : animation de déplacement ?
 	}

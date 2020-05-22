@@ -1,18 +1,16 @@
 package games.bambooInvaders;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
+import app.AppLoader;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.state.StateBasedGame;
 
-import app.AppLoader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class Cell {
 
@@ -70,6 +68,22 @@ public class Cell {
 
 	public float getActionCountdownCoefficient(){
 		return actionCountdownCoefficient.get(this.type);
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public int getBambooStage() {
+		return bambooStage;
+	}
+
+	public int getBambooGauge() {
+		return bambooGauge;
+	}
+
+	public boolean isFertile() {
+		return fertile;
 	}
 
 }

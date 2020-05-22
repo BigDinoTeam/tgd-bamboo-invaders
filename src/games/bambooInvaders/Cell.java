@@ -1,8 +1,8 @@
 package games.bambooInvaders;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONException;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -146,6 +146,18 @@ public class Cell {
 
 	public float getActionCountdownCoefficient(){
 		return actionCountdownCoefficients[this.type];
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public int getBambooStage() {
+		return bambooStage;
+	}
+
+	public int getBambooGauge() {
+		return bambooGauge;
 	}
 
 }

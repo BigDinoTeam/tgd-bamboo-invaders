@@ -107,14 +107,20 @@ public class Grid {
 	}
 
 	/**
-	 * Return cell of given axials coordinates
+	 * Return cell of given axials coordinates, return Null if out of bound
 	 * @param row
 	 * @param col
 	 * @return Cell
 	 */
 	public Cell getCell(int row, int col) {
 		int[] memoryCoord = convertAxialToMemoryCoord(row, col);
-		return this.cells[memoryCoord[0]][memoryCoord[1]];
+		Cell result = null;
+		try{
+			result = this.cells[memoryCoord[0]][memoryCoord[1]];
+		} catch (IndexOutOfBoundsException e) {
+			result = null;
+		}
+		return result;
 	}
 
 	/**

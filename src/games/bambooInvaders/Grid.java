@@ -8,11 +8,11 @@ import java.util.List;
 
 public class Grid {
 
+	private List<List<Cell>> cells;
+
 	public Grid(){
 		//TODO
 	}
-
-	List<List<Cell>> cells;
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		/* Méthode exécutée environ 60 fois par seconde */

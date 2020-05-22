@@ -32,9 +32,9 @@ class Cell {
 	int bambooGauge
 	boolean fertile
 	int getNextBambooThreshold()
-	int getBambooSpeedCoefficient()
-	int getCurrentBambooGaugeCoefficient()
-	int getActionCountdownCoefficient()
+	float getBambooSpeedCoefficient()
+	float getCurrentBambooGaugeCoefficient()
+	float getActionCountdownCoefficient()
 }
 
 World "0"--"1" Dino

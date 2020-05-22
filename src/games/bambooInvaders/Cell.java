@@ -21,7 +21,7 @@ public class Cell {
 	private static float[][] bambooGaugeCoefficients; // Effet de cette case sur les cases adjacentes
 	private static int[] dinoActionDurations;
 	private static float[][] dinoSpeedCoefficients; // 1, .75, .25 : modifie la vitesse de déplacement du Dino
-	private static int size; // Distance entre le centre de l'hexagone et ces sommets
+	private static int size = 80; // Distance entre le centre de l'hexagone et ces sommets
 
 	public static void load(String filename) {
 		String json = AppLoader.loadData(filename);
@@ -134,7 +134,8 @@ public class Cell {
 	public void render(GameContainer container, StateBasedGame game, Graphics context, int x, int y) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		//TODO
-		context.drawImage(getBackground(), x, y);
+		Image background = getBackground();
+		context.drawImage(background, x, y, x + getWidth(), y + getHeight(), 0,0, background.getWidth(), background.getHeight());
 	}
 
 	public boolean isFertile() {

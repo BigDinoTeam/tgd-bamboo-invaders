@@ -1,9 +1,6 @@
 package games.bambooInvaders;
 
-import java.awt.Point;
-import static java.lang.Math.floor;
-import static java.lang.Math.sqrt;
-
+import app.AppLoader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,7 +8,10 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
 
-import app.AppLoader;
+import java.awt.*;
+
+import static java.lang.Math.floor;
+import static java.lang.Math.sqrt;
 
 public class Grid {
 
@@ -144,8 +144,7 @@ public class Grid {
 	 */
 	public static Point getHexagonCoordinates(int row, int col){
 		Point hexagonCenter = getHexagonCenter(row, col);
-		hexagonCenter.move(- Cell.getWidth() / 2, - Cell.getHeight() / 2);
-		return hexagonCenter;
+		return new Point(hexagonCenter.x - Cell.getWidth() / 2, hexagonCenter.y - Cell.getHeight() / 2) ;
 	}
 
 }

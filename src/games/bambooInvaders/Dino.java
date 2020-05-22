@@ -1,13 +1,13 @@
 package games.bambooInvaders;
 
-import java.awt.Point;
+import app.AppLoader;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
-import app.AppLoader;
+import java.awt.*;
 
 public class Dino {
 	
@@ -47,7 +47,7 @@ public class Dino {
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		Point p = Grid.getHexagonCenter(i, j);
+		Point p = this.grid.getHexagonCenter(i, j);
 		
 		context.drawImage(
 					dino, 

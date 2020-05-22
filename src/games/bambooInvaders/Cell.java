@@ -17,9 +17,9 @@ public class Cell {
 	private static Image[] backgrounds;
 	private static boolean[] fertilities;
 	private static int[][] bambooThresholds;
-	private static float[][] bambooSpeedCoefficients; // 1, .75, .25 : modifie la vitesse de déplacement du Dino
 	private static float[][] bambooGaugeCoefficients; // Effet de cette case sur les cases adjacentes
-	private static float[] actionCountdownCoefficients;
+	private static int[] dinoActionDurations;
+	private static float[][] dinoSpeedCoefficients; // 1, .75, .25 : modifie la vitesse de déplacement du Dino
 
 	public static void load(String filename) {
 		String json = AppLoader.loadData(filename);
@@ -32,9 +32,9 @@ public class Cell {
 		Image[] backgrounds = new Image[length];
 		boolean[] fertilities = new boolean[length];
 		int[][] bambooThresholds = new int[length][];
-		float[][] bambooSpeedCoefficients = new float[length][];
 		float[][] bambooGaugeCoefficients = new float[length][];
-		float[] actionCountdownCoefficients = new float[length];
+		int[] dinoActionDurations = new int[length];
+		float[][] dinoSpeedCoefficients = new float[length][];
 		for (int i = 0; i < length; ++i) {
 			JSONObject object = new JSONObject();
 			try {
@@ -71,19 +71,6 @@ public class Cell {
 				thresholds[j] = threshold;
 			}
 			bambooThresholds[i] = thresholds;
-			JSONArray speedCoefficientsArray = new JSONArray();
-			try {
-				speedCoefficientsArray = object.getJSONArray("bamboo_speed_coefficients");
-			} catch (JSONException error) {}
-			float[] speedCoefficients = new float[3];
-			for (int j = 0; j < 3; ++j) {
-				float speedCoefficient = 0;
-				try {
-					speedCoefficient = (float) speedCoefficientsArray.getDouble(j);
-				} catch (JSONException error) {}
-				speedCoefficients[j] = speedCoefficient;
-			}
-			bambooSpeedCoefficients[i] = speedCoefficients;
 			JSONArray gaugeCoefficientsArray = new JSONArray();
 			try {
 				gaugeCoefficientsArray = object.getJSONArray("bamboo_gauge_coefficients");
@@ -97,12 +84,32 @@ public class Cell {
 				gaugeCoefficients[j] = gaugeCoefficient;
 			}
 			bambooGaugeCoefficients[i] = gaugeCoefficients;
-			float actionCountdownCoefficient = 0f;
+			int dinoActionDuration = 0;
 			try {
-				actionCountdownCoefficient = (float) object.getDouble("action_dountdown_coefficient");
+				dinoActionDuration = object.getInt("dino_action_duration");
 			} catch (JSONException error) {}
-			actionCountdownCoefficients[i] = actionCountdownCoefficient;
+			dinoActionDurations[i] = dinoActionDuration;
+			JSONArray speedCoefficientsArray = new JSONArray();
+			try {
+				speedCoefficientsArray = object.getJSONArray("dino_speed_coefficients");
+			} catch (JSONException error) {}
+			float[] speedCoefficients = new float[3];
+			for (int j = 0; j < 3; ++j) {
+				float speedCoefficient = 0;
+				try {
+					speedCoefficient = (float) speedCoefficientsArray.getDouble(j);
+				} catch (JSONException error) {}
+				speedCoefficients[j] = speedCoefficient;
+			}
+			dinoSpeedCoefficients[i] = speedCoefficients;
 		}
+		Cell.names = names;
+		Cell.backgrounds = backgrounds;
+		Cell.fertilities = fertilities;
+		Cell.bambooThresholds = bambooThresholds;
+		Cell.bambooGaugeCoefficients = bambooGaugeCoefficients;
+		Cell.dinoActionDurations = dinoActionDurations;
+		Cell.dinoSpeedCoefficients = dinoSpeedCoefficients;
 	}
 
 	private int type;
@@ -136,16 +143,16 @@ public class Cell {
 		return bambooThresholds[this.type][this.bambooStage + 1];
 	}
 
-	public float getBambooSpeedCoefficient(){
-		return bambooSpeedCoefficients[this.type][this.bambooStage];
-	}
-
 	public float getCurrentBambooGaugeCoefficient(){
 		return bambooGaugeCoefficients[this.type][this.bambooStage];
 	}
 
-	public float getActionCountdownCoefficient(){
-		return actionCountdownCoefficients[this.type];
+	public float getDinoActionDuration(){
+		return dinoActionDurations[this.type];
+	}
+
+	public float getDinoSpeedCoefficient(){
+		return dinoSpeedCoefficients[this.type][this.bambooStage];
 	}
 
 	public int getType() {

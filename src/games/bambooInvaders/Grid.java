@@ -1,5 +1,6 @@
 package games.bambooInvaders;
 
+import app.AppLoader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -7,9 +8,10 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
 
-import app.AppLoader;
+import java.awt.*;
 
 import static java.lang.Math.floor;
+import static java.lang.Math.sqrt;
 
 public class Grid {
 
@@ -91,7 +93,13 @@ public class Grid {
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		//TODO
+		for (int i = 0; i < this.cells.length; i++) {
+			for (int j = 0; j < this.cells[i].length; j++) {
+				int[] axialCoord = convertMemoryToAxialCoord(i, j);
+				Point cellDisplayCoord = getHexagonCoordinates(axialCoord[0], axialCoord[1]);
+				this.cells[i][j].render(container, game, context, cellDisplayCoord.x, cellDisplayCoord.y);
+			}
+		}
 	}
 
 	/**
@@ -100,7 +108,7 @@ public class Grid {
 	 * @param col
 	 * @return Cell
 	 */
-	public Cell getCell(int row, int col){
+	public Cell getCell(int row, int col) {
 		int[] memoryCoord = convertAxialToMemoryCoord(row, col);
 		return this.cells[memoryCoord[0]][memoryCoord[1]];
 	}
@@ -110,8 +118,8 @@ public class Grid {
 	 * @param col : col_axial
 	 * @return [row_memory, col_memory]
 	 */
-	public static int[] convertAxialToMemoryCoord(int row, int col){
-		return new int[] {row, col + (int) (floor(row/2))};
+	public static int[] convertAxialToMemoryCoord(int row, int col) {
+		return new int[]{row, col + (int) (floor(row / 2))};
 	}
 
 	/**
@@ -119,8 +127,25 @@ public class Grid {
 	 * @param col : col_memory
 	 * @return [row_axial, col_axial]
 	 */
-	public static int[] convertMemoryToAxialCoord(int row, int col){
-		return new int[] {row, col - (int) floor(row/2)};
+	public static int[] convertMemoryToAxialCoord(int row, int col) {
+		return new int[]{row, col - (int) floor(row / 2)};
+	}
+
+	public static Point getHexagonCenter(int row, int col){
+		int x = (int) (Cell.getSize() * (sqrt(3) * col + sqrt(3) / 2 * row));
+		int y = (int) (Cell.getSize() * (3. / 2 * row));
+	    return new Point(x, y);
+	}
+
+	/**
+	 * @param row
+	 * @param col
+	 * @return Point en haut à gauche de l'hexagone à partir de ses coordonnées axiales
+	 */
+	public static Point getHexagonCoordinates(int row, int col){
+		Point hexagonCenter = getHexagonCenter(row, col);
+		hexagonCenter.move(- Cell.getWidth() / 2, - Cell.getHeight() / 2);
+		return hexagonCenter;
 	}
 
 }

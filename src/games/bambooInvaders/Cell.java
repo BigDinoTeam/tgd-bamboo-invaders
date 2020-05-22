@@ -1,9 +1,5 @@
 package games.bambooInvaders;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -16,31 +12,107 @@ import app.AppLoader;
 
 public class Cell {
 
-	private static List<Cell> cells;
 	private static Image[] bamboos;
-	private static Map<Integer, int[]> bambooThresholds;
-	private static Map<Integer, float[]> bambooSpeedCoefficients; // 1, .75, .25 : modifie la vitesse de déplacement du Dino
-	private static Map<Integer, float[]> bambooGaugeCoefficients; // Effet de cette case sur les cases adjacentes
-	private static Map<Integer, Float> actionCountdownCoefficient;
+	private static String[] names;
+	private static Image[] backgrounds;
+	private static boolean[] fertilities;
+	private static int[][] bambooThresholds;
+	private static float[][] bambooSpeedCoefficients; // 1, .75, .25 : modifie la vitesse de déplacement du Dino
+	private static float[][] bambooGaugeCoefficients; // Effet de cette case sur les cases adjacentes
+	private static float[] actionCountdownCoefficients;
 
-	public static void load(String path) {
-		Cell.cells = new ArrayList<Cell>();
-		String json = AppLoader.loadData(path);
+	public static void load(String filename) {
+		String json = AppLoader.loadData(filename);
+		JSONArray array = new JSONArray();
 		try {
-			JSONArray array = new JSONArray(json);
-			for (int i = 0, li = array.length(); i < li; ++i) {
-			}
+			array = new JSONArray(json);
 		} catch (JSONException error) {}
+		int length = array.length();
+		String[] names = new String[length];
+		Image[] backgrounds = new Image[length];
+		boolean[] fertilities = new boolean[length];
+		int[][] bambooThresholds = new int[length][];
+		float[][] bambooSpeedCoefficients = new float[length][];
+		float[][] bambooGaugeCoefficients = new float[length][];
+		float[] actionCountdownCoefficients = new float[length];
+		for (int i = 0; i < length; ++i) {
+			JSONObject object = new JSONObject();
+			try {
+				object = array.getJSONObject(i);
+			} catch (JSONException error) {}
+			String name = "";
+			try {
+				name = object.getString("name");
+			} catch (JSONException error) {}
+			names[i] = name;
+			String background = "";
+			try {
+				background = object.getString("background");
+			} catch (JSONException error) {}
+			backgrounds[i] = AppLoader.loadPicture(background);
+			try {
+				object = array.getJSONObject(i);
+			} catch (JSONException error) {}
+			boolean fertility = false;
+			try {
+				fertility = object.getBoolean("fertility");
+			} catch (JSONException error) {}
+			fertilities[i] = fertility;
+			JSONArray thresholdsArray = new JSONArray();
+			try {
+				thresholdsArray = object.getJSONArray("bamboo_thresholds");
+			} catch (JSONException error) {}
+			int[] thresholds = new int[2];
+			for (int j = 0; j < 2; ++j) {
+				int threshold = 0;
+				try {
+					threshold = thresholdsArray.getInt(j);
+				} catch (JSONException error) {}
+				thresholds[j] = threshold;
+			}
+			bambooThresholds[i] = thresholds;
+			JSONArray speedCoefficientsArray = new JSONArray();
+			try {
+				speedCoefficientsArray = object.getJSONArray("bamboo_speed_coefficients");
+			} catch (JSONException error) {}
+			float[] speedCoefficients = new float[3];
+			for (int j = 0; j < 3; ++j) {
+				float speedCoefficient = 0;
+				try {
+					speedCoefficient = (float) speedCoefficientsArray.getDouble(j);
+				} catch (JSONException error) {}
+				speedCoefficients[j] = speedCoefficient;
+			}
+			bambooSpeedCoefficients[i] = speedCoefficients;
+			JSONArray gaugeCoefficientsArray = new JSONArray();
+			try {
+				gaugeCoefficientsArray = object.getJSONArray("bamboo_gauge_coefficients");
+			} catch (JSONException error) {}
+			float[] gaugeCoefficients = new float[3];
+			for (int j = 0; j < 3; ++j) {
+				float gaugeCoefficient = 0;
+				try {
+					gaugeCoefficient = (float) gaugeCoefficientsArray.getDouble(j);
+				} catch (JSONException error) {}
+				gaugeCoefficients[j] = gaugeCoefficient;
+			}
+			bambooGaugeCoefficients[i] = gaugeCoefficients;
+			float actionCountdownCoefficient = 0f;
+			try {
+				actionCountdownCoefficient = (float) object.getDouble("action_dountdown_coefficient");
+			} catch (JSONException error) {}
+			actionCountdownCoefficients[i] = actionCountdownCoefficient;
+		}
 	}
 
 	private int type;
 	private int bambooStage;
 	private int bambooGauge;
-	private boolean fertile;
 
 	public Cell(int type) {
 		this.type = type;
-		//TODO
+		this.bambooStage = 0;
+		this.bambooGauge = 0;
 	}
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
@@ -53,23 +125,27 @@ public class Cell {
 		//TODO
 	}
 
+	public boolean isFertile() {
+		return fertilities[this.type];
+	}
+
 	public int getNextBambooThreshold(){
 		if (this.bambooStage == 2){
 			return -1; // No next threshold
 		}
-		return bambooThresholds.get(this.type)[this.bambooStage + 1];
+		return bambooThresholds[this.type][this.bambooStage + 1];
 	}
 
 	public float getBambooSpeedCoefficient(){
-		return bambooSpeedCoefficients.get(this.type)[this.bambooStage];
+		return bambooSpeedCoefficients[this.type][this.bambooStage];
 	}
 
 	public float getCurrentBambooGaugeCoefficient(){
-		return bambooGaugeCoefficients.get(this.type)[this.bambooStage];
+		return bambooGaugeCoefficients[this.type][this.bambooStage];
 	}
 
 	public float getActionCountdownCoefficient(){
-		return actionCountdownCoefficient.get(this.type);
+		return actionCountdownCoefficients[this.type];
 	}
 
 }

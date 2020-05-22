@@ -88,7 +88,7 @@ public class Dino {
 	}
 	
 	private int move(int direction) {
-		int cooldown = (int) (this.bambooCounter * this.countdownPerBamboo + grid.getCell(i, j).getActionCountdownCoefficient());
+		int cooldown = (int) ((this.bambooCounter * this.countdownPerBamboo + grid.getCell(i, j).getDinoActionDuration()) / grid.getCell(i, j).getDinoSpeedCoefficient()) ;
 		if (cooldown > 3000) cooldown = 3000;
 		
 		int new_i = this.i;

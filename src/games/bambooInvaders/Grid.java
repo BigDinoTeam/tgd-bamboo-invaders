@@ -19,6 +19,8 @@ public class Grid {
 
 	private String name;
 	private Cell[][] cells;
+	private int x;
+	private int y;
 
 	public static void load(String filename) {
 		String json = AppLoader.loadData(filename);
@@ -51,6 +53,8 @@ public class Grid {
 	}
 
 	public Grid(String name, String path) {
+		this.x = (int) ((Cell.getSize() * sqrt(3)) / 2); //TODO : changer en fonction du positionnement de l'interface graphique
+		this.y = Cell.getSize(); //TODO : changer en fonction du positionnement de l'interface graphique
 		this.name = name;
 		String json = AppLoader.loadData(path);
 		JSONObject object = new JSONObject();
@@ -131,9 +135,9 @@ public class Grid {
 		return new int[]{row, col - (int) floor(row / 2)};
 	}
 
-	public static Point getHexagonCenter(int row, int col){
-		int x = (int) (Cell.getSize() * (sqrt(3) * col + sqrt(3) / 2 * row));
-		int y = (int) (Cell.getSize() * (3. / 2 * row));
+	public Point getHexagonCenter(int row, int col){
+		int x = (int) (Cell.getSize() * (sqrt(3) * col + sqrt(3) / 2 * row)) + this.x;
+		int y = (int) (Cell.getSize() * (3. / 2 * row)) + this.y;
 	    return new Point(x, y);
 	}
 
@@ -142,7 +146,7 @@ public class Grid {
 	 * @param col
 	 * @return Point en haut à gauche de l'hexagone à partir de ses coordonnées axiales
 	 */
-	public static Point getHexagonCoordinates(int row, int col){
+	public Point getHexagonCoordinates(int row, int col){
 		Point hexagonCenter = getHexagonCenter(row, col);
 		return new Point(hexagonCenter.x - Cell.getWidth() / 2, hexagonCenter.y - Cell.getHeight() / 2) ;
 	}

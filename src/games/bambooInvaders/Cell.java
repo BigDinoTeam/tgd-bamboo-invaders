@@ -152,7 +152,7 @@ public class Cell {
 		return bambooGaugeCoefficients[this.type][this.bambooStage];
 	}
 
-	public float getDinoActionDuration(){
+	public int getDinoActionDuration(){
 		return dinoActionDurations[this.type];
 	}
 

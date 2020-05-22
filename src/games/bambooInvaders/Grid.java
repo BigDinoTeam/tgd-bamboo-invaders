@@ -12,6 +12,8 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import app.AppLoader;
 
+import static java.lang.Math.floor;
+
 public class Grid {
 
 	private static List<String[]> grids;
@@ -73,6 +75,24 @@ public class Grid {
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		//TODO
+	}
+
+	/**
+	 * @param row : row_axial
+	 * @param col : col_axial
+	 * @return [row_memory, col_memory]
+	 */
+	public static int[] convertAxialToMemoryCoord(int row, int col){
+		return new int[] {row, col + (int) (floor(row/2))};
+	}
+
+	/**
+	 * @param row : row_memory
+	 * @param col : col_memory
+	 * @return [row_axial, col_axial]
+	 */
+	public static int[] convertMemoryToAxialCoord(int row, int col){
+		return new int[] {row, col - (int) floor(row/2)};
 	}
 
 }

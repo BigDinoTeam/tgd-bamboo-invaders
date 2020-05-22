@@ -10,21 +10,18 @@ import org.json.JSONObject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.state.transition.FadeInTransition;
-import org.newdawn.slick.state.transition.FadeOutTransition;
 
 import app.AppLoader;
 
 public class Cell {
 
 	private static List<Cell> cells;
-	static Image[] bamboos;
-	public static Map<Integer, int[]> bambooThresholds;
-	public static Map<Integer, float[]> bambooSpeedCoefficients; // 1, .75, .25
-	public static Map<Integer, float[]> bambooGaugeCoefficients;
-	public static Map<Integer, Float> actionCountdownCoefficient;
+	private static Image[] bamboos;
+	private static Map<Integer, int[]> bambooThresholds;
+	private static Map<Integer, float[]> bambooSpeedCoefficients; // 1, .75, .25 : modifie la vitesse de déplacement du Dino
+	private static Map<Integer, float[]> bambooGaugeCoefficients; // Effet de cette case sur les cases adjacentes
+	private static Map<Integer, Float> actionCountdownCoefficient;
 
 	public static void load(String path) {
 		Cell.cells = new ArrayList<Cell>();
@@ -37,9 +34,9 @@ public class Cell {
 	}
 
 	private int type;
-	public int bambooStage;
-	public int bambooGauge;
-	public boolean fertile;
+	private int bambooStage;
+	private int bambooGauge;
+	private boolean fertile;
 
 	public Cell(int type) {
 		this.type = type;
@@ -55,4 +52,24 @@ public class Cell {
 		/* Méthode exécutée environ 60 fois par seconde */
 		//TODO
 	}
+
+	public int getNextBambooThreshold(){
+		if (this.bambooStage == 2){
+			return -1; // No next threshold
+		}
+		return bambooThresholds.get(this.type)[this.bambooStage + 1];
+	}
+
+	public float getBambooSpeedCoefficient(){
+		return bambooSpeedCoefficients.get(this.type)[this.bambooStage];
+	}
+
+	public float getCurrentBambooGaugeCoefficient(){
+		return bambooGaugeCoefficients.get(this.type)[this.bambooStage];
+	}
+
+	public float getActionCountdownCoefficient(){
+		return actionCountdownCoefficient.get(this.type);
+	}
+
 }

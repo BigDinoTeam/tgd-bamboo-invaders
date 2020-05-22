@@ -1,14 +1,15 @@
 package games.bambooInvaders;
 
+import app.AppLoader;
 import org.json.JSONArray;
-import org.json.JSONObject;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.state.StateBasedGame;
 
-import app.AppLoader;
+import static java.lang.Math.sqrt;
 
 public class Cell {
 
@@ -20,6 +21,7 @@ public class Cell {
 	private static float[][] bambooGaugeCoefficients; // Effet de cette case sur les cases adjacentes
 	private static int[] dinoActionDurations;
 	private static float[][] dinoSpeedCoefficients; // 1, .75, .25 : modifie la vitesse de déplacement du Dino
+	private static int size; // Distance entre le centre de l'hexagone et ces sommets
 
 	public static void load(String filename) {
 		String json = AppLoader.loadData(filename);
@@ -127,9 +129,10 @@ public class Cell {
 		//TODO
 	}
 
-	public void render(GameContainer container, StateBasedGame game, Graphics context) {
+	public void render(GameContainer container, StateBasedGame game, Graphics context, int x, int y) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		//TODO
+		context.drawImage(getBackground(), x, y);
 	}
 
 	public boolean isFertile() {
@@ -165,6 +168,22 @@ public class Cell {
 
 	public int getBambooGauge() {
 		return bambooGauge;
+	}
+
+	public static int getSize(){
+		return size;
+	}
+
+	public static int getWidth(){
+		return (int) (sqrt(3) * size);
+	}
+
+	public static int getHeight(){
+		return 2 * size;
+	}
+
+	public Image getBackground(){
+		return backgrounds[this.type];
 	}
 
 }

@@ -1,0 +1,22 @@
+[
+	{
+		"id": 0,
+		"name": "Nid",
+		"image": "/images/bambooInvaders/cells/nid.png"
+	}
+	{
+		"id": 1,
+		"name": "Sable",
+		"image": "/images/bambooInvaders/cells/sable.png"
+	}
+	{
+		"id": 2,
+		"name": "Herbe",
+		"image": "/images/bambooInvaders/cells/herbe.png"
+	}
+	{
+		"id": 2,
+		"name": "Eau",
+		"image": "/images/bambooInvaders/cells/eau.png"
+	}
+]

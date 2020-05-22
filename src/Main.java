@@ -11,6 +11,9 @@ import org.newdawn.slick.state.StateBasedGame;
 
 import app.AppLoader;
 
+import games.bambooInvaders.Cell;
+import games.bambooInvaders.Grid;
+
 public final class Main {
 
 	public static final void main(String[] arguments) throws SlickException {
@@ -45,6 +48,8 @@ public final class Main {
 			height = display.getHeight();
 			fullscreen = true;
 		}
+		Cell.load("/data/bambooInvaders/cells.json");
+		Grid.load("/data/bambooInvaders/grids.json");
 		StateBasedGame game = new StateBasedGame(title) {
 
 			@Override

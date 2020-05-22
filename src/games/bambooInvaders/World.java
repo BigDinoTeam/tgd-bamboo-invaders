@@ -12,6 +12,7 @@ public class World extends BasicGameState {
 
 	private int ID;
 	private int state;
+	private Grid grid;
 
 	public World(int ID) {
 		this.ID = ID;
@@ -57,6 +58,7 @@ public class World extends BasicGameState {
 			this.setState(1);
 			game.enterState(2, new FadeOutTransition(), new FadeInTransition());
 		}
+		this.grid.update(container, game, delta);
 	}
 
 	@Override
@@ -86,6 +88,10 @@ public class World extends BasicGameState {
 
 	public int getState() {
 		return this.state;
+	}
+
+	public void setGrid(Grid grid) {
+		this.grid = grid;
 	}
 
 }

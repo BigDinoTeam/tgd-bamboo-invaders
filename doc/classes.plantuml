@@ -1,0 +1,45 @@
+@startuml
+
+class World
+
+class Dino {
+	int bambooCounter
+	int actionCountdown
+	int i
+	int j
+	int score
+	update()
+	render()
+	move()
+	eat()
+	regurgitate()
+}
+
+class Grid {
+	Cell[][] cells
+	update()
+	render()
+}
+
+class Cell {
+	int type // 0: Nest, 1: Sand, 2: Grass, 2: Water
+	static Image[2] bamboos
+	static Map<Integer, int[2]> bambooThresholds
+	static Map<Integer, float[3]> bambooSpeedCoefficients // 1, .75, .25
+	static Map<Integer, float[3]> bambooGaugeCoefficients
+	static Map<Integer, float> actionCountdownCoefficient
+	int bambooStage
+	int bambooGauge
+	boolean fertile
+	int getNextBambooThreshold()
+	int getBambooSpeedCoefficient()
+	int getCurrentBambooGaugeCoefficient()
+	int getActionCountdownCoefficient()
+}
+
+World "0"--"1" Dino
+World "0"--"*" Grid
+
+Grid "0"--"*" Cell
+
+@enduml

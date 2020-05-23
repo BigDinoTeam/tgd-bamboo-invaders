@@ -25,11 +25,12 @@ public class Dino {
 	private final int timeRegurgiteBamboo = 50; // 50 ms
 	private final int countdownPerBamboo = 50; // 50 ms
 
-	public Dino(Grid grid, int start_i, int start_j) {
+	public Dino(Grid grid) {
 		this.score = 0;
 		this.grid = grid;
-		this.i = start_i;
-		this.j = start_j;
+		int[] ij = grid.findNest();
+		this.i = ij[0];
+		this.j = ij[1];
 		this.actionCountdown = 0;
 		this.bambooCounter = 0;
 		this.timeRegurgitating = 0;

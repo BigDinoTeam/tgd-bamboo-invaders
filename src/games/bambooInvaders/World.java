@@ -4,7 +4,9 @@ import app.AppLoader;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -23,6 +25,8 @@ public class World extends BasicGameState {
 	private Dino[] dinos; // 1 ou 2 dinos
 	private Audio worldMusic;
 	private float worldMusicPosition;
+	private Image worldBackground;
+	private Rectangle background;
 
 	private int winnerDino;
 	private String winReason; // Whether the winner win by score or by surviving longer than its opponent
@@ -42,6 +46,8 @@ public class World extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au chargement du programme */
 		this.worldMusic = AppLoader.loadAudio("/sounds/bambooInvaders/Tidal_Wave.ogg");
+		this.worldBackground = AppLoader.loadPicture("/images/bambooInvaders/background.png");
+		this.background = new Rectangle(0, 0, container.getWidth(), container.getHeight());
 	}
 
 	@Override
@@ -113,8 +119,16 @@ public class World extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
+		context.texture(background, worldBackground, true);
+		
 		int width = container.getWidth();
 		int height = container.getHeight();
+		if (!this.grid.isMultiplayer()) {
+			Point point = this.dinos[0].getPoint();
+			this.grid.render(container, game, context, point.x, point.y);
+			this.dinos[0].render(container, game, context, -width / 2, -height / 2, true);
+			return;
+		}
 		Point firstPoint = this.dinos[0].getPoint();
 		Point lastPoint = this.dinos[1].getPoint();
 		context.setClip(0, 0, width / 2, height);
@@ -129,14 +143,19 @@ public class World extends BasicGameState {
 		context.setColor(new Color(0, 0, 0));
 		context.setLineWidth(20);
 		context.drawLine(width / 2, 0, width / 2, height);
+		context.setLineWidth(1);
 	}
 
 	public void play(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au début du jeu */
 		if (!this.worldMusic.isPlaying()) {
-			this.worldMusic.playAsMusic(1, 0.4f, true);
+			this.worldMusic.playAsMusic(1, .3f, true);
 		}
-		this.dinos = new Dino[]{new Dino(grid, false), new Dino(grid, true)}; // TODO : gérer le cas d'un Dino en solo
+		if (!this.grid.isMultiplayer()) {
+			this.dinos = new Dino[]{new Dino(grid, false)};
+			return;
+		}
+		this.dinos = new Dino[]{new Dino(grid, false), new Dino(grid, true)};
 	}
 
 	public void pause(GameContainer container, StateBasedGame game) {
@@ -150,7 +169,7 @@ public class World extends BasicGameState {
 	public void resume(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée lors de la reprise du jeu */
 		if (!this.worldMusic.isPlaying()) {
-			this.worldMusic.playAsMusic(1, 0.4f, true);
+			this.worldMusic.playAsMusic(1, .3f, true);
 			this.worldMusic.setPosition(worldMusicPosition);
 		}
 	}

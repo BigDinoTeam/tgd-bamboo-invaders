@@ -6,6 +6,12 @@
 		"path": "/data/bambooInvaders/grids/delta.json",
 	},
 	{
+		"id": 3,
+		"name": "Mountains",
+		"multiplayer": false,
+		"path": "/data/bambooInvaders/grids/mountains.json",
+	},
+	{
 		"id": 1,
 		"name": "Main River",
 		"multiplayer": true,

@@ -2,7 +2,7 @@ package games.bambooInvaders;
 
 import java.awt.Point;
 
-import app.AppLoader;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -12,6 +12,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import app.AppLoader;
 
 public class World extends BasicGameState {
 
@@ -19,8 +20,6 @@ public class World extends BasicGameState {
 	private int ID;
 	private int state;
 	private Grid grid;
-	private Dino firstDino;
-	private Dino lastDino;
 	private Dino[] dinos; // 1 ou 2 dinos
 	private Audio worldMusic;
 	private float worldMusicPosition;
@@ -105,25 +104,28 @@ public class World extends BasicGameState {
 		/* Méthode exécutée environ 60 fois par seconde */
 		int width = container.getWidth();
 		int height = container.getHeight();
+		Point firstPoint = this.dinos[0].getPoint();
+		Point lastPoint = this.dinos[1].getPoint();
 		context.setClip(0, 0, width / 2, height);
-		Point firstPoint = this.firstDino.getPoint();
 		this.grid.render(container, game, context, firstPoint.x + width / 4, firstPoint.y);
-		this.firstDino.render(container, game, context);
+		this.dinos[1].render(container, game, context, firstPoint.x - lastPoint.x - width / 4, firstPoint.y - lastPoint.y - height / 2, false);
+		this.dinos[0].render(container, game, context, -width / 4, -height / 2, true);
 		context.setClip(width / 2, 0, width / 2, height);
-		Point lastPoint = this.lastDino.getPoint();
 		this.grid.render(container, game, context, lastPoint.x - width / 4, lastPoint.y);
-		this.lastDino.render(container, game, context);
+		this.dinos[0].render(container, game, context, lastPoint.x - firstPoint.x - width * 3 / 4, lastPoint.y - firstPoint.y - height / 2, false);
+		this.dinos[1].render(container, game, context, -width * 3 / 4, -height / 2, true);
 		context.setClip(0, 0, width, height);
+		context.setColor(new Color(0, 0, 0));
+		context.setLineWidth(20);
+		context.drawLine(width / 2, 0, width / 2, height);
 	}
 
 	public void play(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au début du jeu */
-		this.firstDino = new Dino(grid, false);
-		this.lastDino = new Dino(grid, true);
 		if (!this.worldMusic.isPlaying()) {
 			this.worldMusic.playAsMusic(1, 0.4f, true);
 		}
-		this.dinos = new Dino[]{this.firstDino, this.lastDino}; // TODO : gérer le cas d'un Dino en solo
+		this.dinos = new Dino[]{new Dino(grid, false), new Dino(grid, true)}; // TODO : gérer le cas d'un Dino en solo
 	}
 
 	public void pause(GameContainer container, StateBasedGame game) {

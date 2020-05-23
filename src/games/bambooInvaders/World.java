@@ -2,6 +2,7 @@ package games.bambooInvaders;
 
 import java.awt.Point;
 
+import app.AppLoader;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -10,8 +11,6 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
-
-import app.AppLoader;
 
 
 public class World extends BasicGameState {

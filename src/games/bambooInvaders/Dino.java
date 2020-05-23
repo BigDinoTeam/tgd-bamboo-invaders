@@ -2,13 +2,16 @@ package games.bambooInvaders;
 
 import app.AppFont;
 import app.AppLoader;
+
+import java.awt.Point;
+
 import org.newdawn.slick.Color;
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.*;
+import org.newdawn.slick.Input;
+import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.state.StateBasedGame;
-
-import java.awt.*;
 
 public class Dino {
 
@@ -59,9 +62,9 @@ public class Dino {
 		this.dino = AppLoader.loadPicture("/images/bambooInvaders/dino.png");
 		this.dino_down = AppLoader.loadPicture("/images/bambooInvaders/dino_down.png");
 		this.gui = AppLoader.loadPicture("/images/bambooInvaders/GUI.png");
-		this.eat = AppLoader.loadAudio("/sounds/bambooInvaders/mange.mp3");
-		this.regurgitate = AppLoader.loadAudio("/sounds/bambooInvaders/regurgite.mp3");
-		this.splash = AppLoader.loadAudio("/sounds/bambooInvaders/splash.mp3");
+		this.eat = AppLoader.loadAudio("/sounds/bambooInvaders/mange.ogg");
+		this.regurgitate = AppLoader.loadAudio("/sounds/bambooInvaders/regurgite.ogg");
+		this.splash = AppLoader.loadAudio("/sounds/bambooInvaders/splash.ogg");
 		this.bambooFont = AppLoader.loadFont(null, AppFont.BOLD, 42);
 	}
 

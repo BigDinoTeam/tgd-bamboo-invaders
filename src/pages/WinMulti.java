@@ -23,7 +23,7 @@ public class WinMulti extends AppPage {
 
 	public void init(GameContainer container, StateBasedGame game) {
 		this.background = AppLoader.loadPicture("/images/bambooInvaders/win_multi.png");
-		this.music = AppLoader.loadAudio("/sounds/bambooInvaders/Le_bruit_dun_scorpion_qui_meurt.mp3");
+		this.music = AppLoader.loadAudio("/sounds/bambooInvaders/Le_bruit_dun_scorpion_qui_meurt.ogg");
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package games.bambooInvaders;
 
+import java.awt.Point;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -9,7 +11,8 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import java.awt.*;
+import app.AppLoader;
+
 
 public class World extends BasicGameState {
 
@@ -36,7 +39,7 @@ public class World extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au chargement du programme */
-		this.worldMusic = AppLoader.loadAudio("/sounds/bambooInvaders/Tidal_Wave.mp3");
+		this.worldMusic = AppLoader.loadAudio("/sounds/bambooInvaders/Tidal_Wave.ogg");
 	}
 
 	@Override

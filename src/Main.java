@@ -1,18 +1,13 @@
-import java.awt.DisplayMode;
-import java.awt.GraphicsEnvironment;
-
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-
+import app.AppLoader;
+import games.bambooInvaders.Cell;
+import games.bambooInvaders.Grid;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
 
-import app.AppLoader;
-
-import games.bambooInvaders.Cell;
-import games.bambooInvaders.Grid;
+import javax.swing.*;
+import java.awt.*;
 
 public final class Main {
 
@@ -61,6 +56,7 @@ public final class Main {
 				this.addState(new pages.Rules(4));
 				this.addState(new pages.Death(5));
 				this.addState(new pages.Win(6));
+				this.addState(new pages.WinMulti(7));
 			}
 
 		};

@@ -7,7 +7,7 @@
 		"bamboo_thresholds": [10000, 10000],
 		"bamboo_gauge_coefficients": [0, 0, 0],
 		"dino_action_duration": 300,
-		"dino_speed_coefficients": [1, .75, .25]
+		"dino_speed_coefficients": [1, .8, .5]
 	},
 	{
 		"id": 1,
@@ -17,7 +17,7 @@
 		"bamboo_thresholds": [4000, 2000],
 		"bamboo_gauge_coefficients": [0, .25, .5],
 		"dino_action_duration": 500,
-		"dino_speed_coefficients": [1, .75, .25]
+		"dino_speed_coefficients": [1, .8, .5]
 	},
 	{
 		"id": 2,
@@ -27,7 +27,7 @@
 		"bamboo_thresholds": [4000, 2000],
 		"bamboo_gauge_coefficients": [.25, .5, .75],
 		"dino_action_duration": 300,
-		"dino_speed_coefficients": [1, .75, .25]
+		"dino_speed_coefficients": [1, .8, .5]
 	},
 	{
 		"id": 3,
@@ -37,7 +37,7 @@
 		"bamboo_thresholds": [4000, 2000],
 		"bamboo_gauge_coefficients": [.5, .75, 1],
 		"dino_action_duration": 1500,
-		"dino_speed_coefficients": [1, .75, .25]
+		"dino_speed_coefficients": [1, .8, .5]
 	},
 	{
 		"id": 4,

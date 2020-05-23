@@ -31,8 +31,8 @@ public class Dino {
 	private boolean isRegurgitating;
 	private int timeRegurgitating;
 
-	private final int timeRegurgiteBamboo = 150; // 150 ms
-	private final int countdownPerBamboo = 50; // 50 ms
+	private final int timeRegurgiteBamboo = 50; // 50 ms
+	private final int countdownPerBamboo = 20; // 20 ms
 
 	public Dino(Grid grid) {
 		this.score = 0;
@@ -174,7 +174,7 @@ public class Dino {
 			this.nextJ = this.j;
 			return 0;
 		}
-		int cooldown = (int) ((this.bambooCounter * this.countdownPerBamboo + grid.getCell(i, j).getDinoActionDuration()) / grid.getCell(i, j).getDinoSpeedCoefficient()) ;
+		int cooldown = (int) (this.bambooCounter * this.countdownPerBamboo + grid.getCell(i, j).getDinoActionDuration() / grid.getCell(i, j).getDinoSpeedCoefficient()) ;
 		if (cooldown > 3000) cooldown = 3000;
 
 		return cooldown;
@@ -182,7 +182,7 @@ public class Dino {
 
 	private int eat(int stage) {
 		this.bambooCounter += stage*1.5;
-		return (int) 500*stage;
+		return (int) 250*stage;
 	}
 
 	private void regurgitate(int delta) {

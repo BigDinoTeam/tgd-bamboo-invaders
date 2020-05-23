@@ -20,7 +20,7 @@ public class Death extends AppPage {
 	}
 
 	public void init(GameContainer container, StateBasedGame game) {
-		this.background = AppLoader.loadPicture("/images/bambooInvaders/death.png");
+		this.background = AppLoader.loadPicture("/images/bambooInvaders/end.png");
 		this.music = AppLoader.loadAudio("/sounds/bambooInvaders/Le_bruit_dun_scorpion_qui_meurt.ogg");
 		this.font = AppLoader.loadFont("/fonts/Garamond.ttf",0, 40);
 	}
@@ -46,7 +46,7 @@ public class Death extends AppPage {
 
 		World world = (World) game.getState(3);
 		context.setFont(this.font);
-		context.drawString("Score : " + world.getDinos()[0].getScore() / 1000, 750, 975);
+		context.drawString("Score : " + (world.getDinos()[0].getScore() / 1000), 750, 975);
 	}
 
 }

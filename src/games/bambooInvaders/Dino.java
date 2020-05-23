@@ -15,6 +15,7 @@ import org.newdawn.slick.state.StateBasedGame;
 public class Dino {
 
 	private Image dino;
+	private Image dino_down;
 	private Image gui;
 	private AppFont bambooFont;
 
@@ -30,6 +31,7 @@ public class Dino {
 	private int score;
 	private boolean isRegurgitating;
 	private int timeRegurgitating;
+	private boolean inAction;
 
 	private final int timeRegurgiteBamboo = 50; // 50 ms
 	private final int countdownPerBamboo = 20; // 20 ms
@@ -48,7 +50,9 @@ public class Dino {
 		this.bambooCounter = 0;
 		this.timeRegurgitating = 0;
 		this.isRegurgitating = false;
+		this.inAction = false;
 		this.dino = AppLoader.loadPicture("/images/bambooInvaders/dino.png");
+		this.dino_down = AppLoader.loadPicture("/images/bambooInvaders/dino_down.png");
 		this.gui = AppLoader.loadPicture("/images/bambooInvaders/GUI.png");
 		this.bambooFont = AppLoader.loadFont(null, AppFont.BOLD, 42);
 	}
@@ -59,6 +63,7 @@ public class Dino {
 
 		this.actionCountdown -= delta;
 		if (this.actionCountdown <= 0) {
+			this.inAction = false;
 			this.i = this.nextI;
 			this.j = this.nextJ;
 			this.actionCountdown = this.initialActionCountdown = checkInput(container,delta);
@@ -68,7 +73,7 @@ public class Dino {
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		context.drawImage(
-				dino,
+				this.inAction ? dino_down : dino,
 				container.getWidth() / 2 - Cell.getWidth() / 3,
 				container.getHeight() / 2 - Cell.getHeight() / 3,
 				container.getWidth() / 2 + Cell.getWidth() / 3,
@@ -106,11 +111,13 @@ public class Dino {
 			Cell cell = grid.getCell(i, j);
 			if (cell.getType() == 0  && this.bambooCounter > 0) {
 				isRegurgitating = true;
+				inAction = true;
 			}
 			// Mange les bambous s'il y en a
 			else {
 				int stage = cell.getBambooStage();
 				if (stage > 0) {
+					inAction = true;
 					cell.setBambooGauge(0);
 					cell.setBambooStage(0);
 					return eat(stage);

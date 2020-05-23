@@ -94,7 +94,7 @@ public class World extends BasicGameState {
 					game.enterState(5 , new FadeOutTransition (), new FadeInTransition ()); // Death page (if only one Dino)
 				} else{
 					this.winnerDino = 1 - i; // the other dino is the winner
-					this.winReason = "L'autre nid a été envahis par des bambous."; // Other nest bamboozled
+					this.winReason = "L'autre nid fut envahis par des bambous."; // Other nest bamboozled
 					game.enterState(7 , new FadeOutTransition (), new FadeInTransition ()); // WinMulti page with the other Dino as winner
 				}
 			}
@@ -120,7 +120,7 @@ public class World extends BasicGameState {
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		context.texture(background, worldBackground, true);
-		
+
 		int width = container.getWidth();
 		int height = container.getHeight();
 		if (!this.grid.isMultiplayer()) {
@@ -140,7 +140,7 @@ public class World extends BasicGameState {
 		this.dinos[0].render(container, game, context, lastPoint.x - firstPoint.x - width * 3 / 4, lastPoint.y - firstPoint.y - height / 2, false);
 		this.dinos[1].render(container, game, context, -width * 3 / 4, -height / 2, true);
 		context.setClip(0, 0, width, height);
-		context.setColor(new Color(0, 0, 0));
+		context.setColor(Color.black);
 		context.setLineWidth(20);
 		context.drawLine(width / 2, 0, width / 2, height);
 		context.setLineWidth(1);

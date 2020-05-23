@@ -47,9 +47,10 @@ public class WinMulti extends AppPage {
 		World world = (World) game.getState(3);
 
 		context.setFont(this.font);
-		context.drawString("Le dino " + (world.getWinnerDino() + 1) + " a gagné pour la raison suivante : " + world.getWinReason(), 100, 100);
-		context.drawString("Score du dino 1 : " + world.getDinos()[0].getScore() / 1000, 100, 200);
-		context.drawString("Score du dino 2 : " + world.getDinos()[1].getScore() / 1000, 100, 300);
+		context.drawString("Le dino " + (world.getWinnerDino() + 1) + " gagne pour la raison suivante :", 150, 100);
+		context.drawString( world.getWinReason(), 150, 150);
+		context.drawString("Score du dino 1 : " + world.getDinos()[0].getScore() / 1000, 150, 230);
+		context.drawString("Score du dino 2 : " + world.getDinos()[1].getScore() / 1000, 150, 300);
 	}
 
 }

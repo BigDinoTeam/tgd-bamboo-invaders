@@ -19,6 +19,8 @@ public class Grid {
 	private static String[][] grids;
 
 	private String name;
+	private int width;
+	private int height;
 	private Cell[][] cells;
 	private int x;
 	private int y;
@@ -63,11 +65,11 @@ public class Grid {
 		try {
 			object = new JSONObject(json);
 		} catch (JSONException error) {}
-		int width = 0;
+		this.width = 0;
 		try {
 			width = object.getInt("width");
 		} catch (JSONException error) {}
-		int height = 0;
+		this.height = 0;
 		try {
 			height = object.getInt("height");
 		} catch (JSONException error) {}
@@ -95,8 +97,8 @@ public class Grid {
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		for (int i = 0, li = this.cells.length; i < li; ++i) {
-			for (int j = 0, lj = this.cells[i].length; j < lj; ++j) {
+		for (int i = 0; i < height; ++i) {
+			for (int j = 0; j < width; ++j) {
 				Cell cell = this.cells[i][j];
 				float coefficient = cell.getBambooGaugeCoefficient();
 				int[] cellPlace = Grid.convertMemoryToAxialCoord(i, j);
@@ -140,8 +142,8 @@ public class Grid {
 				}
 			}
 		}
-		for (int i = 0, li = this.cells.length; i < li; ++i) {
-			for (int j = 0, lj = this.cells[i].length; j < lj; ++j) {
+		for (int i = 0; i < height; ++i) {
+			for (int j = 0; j < width; ++j) {
 				this.cells[i][j].update(container, game, delta);
 			}
 		}
@@ -149,8 +151,8 @@ public class Grid {
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context, int scrollX, int scrollY) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		for (int i = 0; i < this.cells.length; i++) {
-			for (int j = 0; j < this.cells[i].length; j++) {
+		for (int i = 0; i < height; ++i) {
+			for (int j = 0; j < width; ++j) {
 				int[] axialCoord = convertMemoryToAxialCoord(i, j);
 				Point cellDisplayCoord = getHexagonCoordinates(axialCoord[0], axialCoord[1]);
 				this.cells[i][j].render(container, game, context, cellDisplayCoord.x - scrollX, cellDisplayCoord.y - scrollY);
@@ -209,9 +211,21 @@ public class Grid {
 		return new Point(hexagonCenter.x - Cell.getWidth() / 2, hexagonCenter.y - Cell.getHeight() / 2) ;
 	}
 
-	public int[] findNestPlace() {
-		for (int i = 0, li = this.cells.length; i < li; ++i) {
-			for (int j = 0, lj = this.cells[i].length; j < lj; ++j) {
+	public int[] findNestPlace(boolean reversed) {
+		if (!reversed) {
+			for (int i = 0; i < height; ++i) {
+				for (int j = 0; j < width; ++j) {
+					Cell cell = this.cells[i][j];
+					if (cell.getType() != 0) {
+						continue;
+					}
+					return convertMemoryToAxialCoord(i, j);
+				}
+			}
+			return new int[]{0, 0};
+		}
+		for (int i = height - 1; i >= 0; --i) {
+			for (int j = width - 1; j >= 0; --j) {
 				Cell cell = this.cells[i][j];
 				if (cell.getType() != 0) {
 					continue;
@@ -219,7 +233,7 @@ public class Grid {
 				return convertMemoryToAxialCoord(i, j);
 			}
 		}
-		return new int[]{0, 0};
+		return new int[]{height, width};
 	}
 
 }

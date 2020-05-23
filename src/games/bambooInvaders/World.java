@@ -1,6 +1,5 @@
 package games.bambooInvaders;
 
-import java.awt.*;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -9,8 +8,11 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import java.awt.*;
+
 public class World extends BasicGameState {
 
+	private static int goalScore = 150; // Score to reach to win
 	private int ID;
 	private int state;
 	private Grid grid;
@@ -62,6 +64,15 @@ public class World extends BasicGameState {
 		}
 		this.grid.update(container, game, delta);
 		this.dino.update(container, game, delta);
+
+		// Check winner/looser :
+		//TODO : loop through Dino check if a nest was bamboozled
+		//TODO : loop through Dino to check score
+		if(this.dino.getScore() / 1000 >= this.goalScore){
+			// TODO : launch win page with this dino as the winner. Reason : score
+			this.setState(3);
+			game.enterState(6 , new FadeOutTransition (), new FadeInTransition ());
+		}
 	}
 
 	@Override

@@ -2,15 +2,13 @@ package games.bambooInvaders;
 
 import app.AppFont;
 import app.AppLoader;
-
-import java.awt.Point;
-
 import org.newdawn.slick.Color;
-import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
+import org.newdawn.slick.*;
 import org.newdawn.slick.state.StateBasedGame;
+
+import java.awt.*;
 
 public class Dino {
 
@@ -214,5 +212,9 @@ public class Dino {
 		int x = (point.x * this.actionCountdown + nextPoint.x * (this.initialActionCountdown - this.actionCountdown)) / this.initialActionCountdown;
 		int y = (point.y * this.actionCountdown + nextPoint.y * (this.initialActionCountdown - this.actionCountdown)) / this.initialActionCountdown;
 		return new Point(x, y);
+	}
+
+	public int getScore() {
+		return this.score;
 	}
 }

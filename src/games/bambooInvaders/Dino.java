@@ -14,9 +14,12 @@ public class Dino {
 	private Image dino;
 
 	private int bambooCounter;
+	private int initialActionCountdown;
 	private int actionCountdown;
 	private int i;
 	private int j;
+	private int nextI;
+	private int nextJ;
 	private Grid grid;
 	private int score;
 	private boolean isRegurgitating;
@@ -31,6 +34,9 @@ public class Dino {
 		int[] ij = grid.findNestPlace();
 		this.i = ij[0];
 		this.j = ij[1];
+		this.nextI = ij[0];
+		this.nextJ = ij[1];
+		this.initialActionCountdown = 0;
 		this.actionCountdown = 0;
 		this.bambooCounter = 0;
 		this.timeRegurgitating = 0;
@@ -43,7 +49,11 @@ public class Dino {
 		this.score += delta;
 
 		this.actionCountdown -= delta;
-		if (this.actionCountdown <= 0) this.actionCountdown = checkInput(container,delta);
+		if (this.actionCountdown <= 0) {
+			this.i = this.nextI;
+			this.j = this.nextJ;
+			this.actionCountdown = this.initialActionCountdown = checkInput(container,delta);
+		}
 	}
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
@@ -59,8 +69,6 @@ public class Dino {
 			dino.getWidth(),
 			dino.getHeight()
 		);
-
-		// TODO : animation de déplacement ?
 	}
 
 	private int checkInput(GameContainer container, int delta) {
@@ -109,38 +117,37 @@ public class Dino {
 	}
 
 	private int move(int direction) {
-		int cooldown = (int) ((this.bambooCounter * this.countdownPerBamboo + grid.getCell(i, j).getDinoActionDuration()) / grid.getCell(i, j).getDinoSpeedCoefficient()) ;
-		if (cooldown > 3000) cooldown = 3000;
-
-		int new_i = this.i;
-		int new_j = this.j;
 		switch (direction) {
 		case 0:
-			new_i = this.i-1;
+			--this.nextI;
 			break;
 		case 1:
-			new_i = this.i-1;
-			new_j = this.j+1;
+			--this.nextI;
+			++this.nextJ;
 			break;
 		case 2:
-			new_j = this.j+1;
+			++this.nextJ;
 			break;
 		case 3:
-			new_i = this.i+1;
+			++this.nextI;
 			break;
 		case 4:
-			new_i = this.i+1;
-			new_j = this.j-1;
+			++this.nextI;
+			--this.nextJ;
 			break;
 		case 5:
-			new_j = this.j-1;
+			--this.nextJ;
 			break;
 		}
 
-		if (grid.getCell(new_i, new_j).getDinoSpeedCoefficient() == 0) return 0; // La case n'est pas accessible
-
-		this.i = new_i;
-		this.j = new_j;
+		Cell nextCell = grid.getCell(this.nextI, this.nextJ);
+		if (nextCell == null || nextCell.getDinoSpeedCoefficient() == 0) { // La case n'est pas accessible
+			this.nextI = this.i;
+			this.nextJ = this.j;
+			return 0;
+		}
+		int cooldown = (int) ((this.bambooCounter * this.countdownPerBamboo + grid.getCell(i, j).getDinoActionDuration()) / grid.getCell(i, j).getDinoSpeedCoefficient()) ;
+		if (cooldown > 3000) cooldown = 3000;
 
 		return cooldown;
 	}
@@ -164,6 +171,13 @@ public class Dino {
 	}
 
 	public Point getPoint() {
-		return this.grid.getHexagonCenter(this.i, this.j);
+		Point point = this.grid.getHexagonCenter(this.i, this.j);
+		if (this.initialActionCountdown == 0) {
+			return point;
+		}
+		Point nextPoint = this.grid.getHexagonCenter(this.nextI, this.nextJ);
+		int x = (point.x * this.actionCountdown + nextPoint.x * (this.initialActionCountdown - this.actionCountdown)) / this.initialActionCountdown;
+		int y = (point.y * this.actionCountdown + nextPoint.y * (this.initialActionCountdown - this.actionCountdown)) / this.initialActionCountdown;
+		return new Point(x, y);
 	}
 }

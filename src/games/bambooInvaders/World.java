@@ -174,4 +174,16 @@ public class World extends BasicGameState {
 		this.grid = grid;
 	}
 
+	public int getWinnerDino() {
+		return winnerDino;
+	}
+
+	public String getWinReason() {
+		return winReason;
+	}
+
+	public Dino[] getDinos() {
+		return dinos;
+	}
+
 }

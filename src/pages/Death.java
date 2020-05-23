@@ -1,21 +1,19 @@
 package pages;
 
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.Image;
-import org.newdawn.slick.Input;
+import app.AppLoader;
+import app.AppPage;
+import games.bambooInvaders.World;
+import org.newdawn.slick.*;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import app.AppLoader;
-import app.AppPage;
-
 public class Death extends AppPage {
 
 	private Image background;
 	private Audio music;
+	private Font font;
 
 	public Death(int ID) {
 		super(ID);
@@ -24,6 +22,7 @@ public class Death extends AppPage {
 	public void init(GameContainer container, StateBasedGame game) {
 		this.background = AppLoader.loadPicture("/images/bambooInvaders/death.png");
 		this.music = AppLoader.loadAudio("/sounds/bambooInvaders/Le_bruit_dun_scorpion_qui_meurt.ogg");
+		this.font = AppLoader.loadFont("/fonts/Garamond.ttf",0, 40);
 	}
 
 	@Override
@@ -44,6 +43,10 @@ public class Death extends AppPage {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		context.drawImage(this.background, 0, 0, container.getWidth(), container.getHeight(), 0, 0, this.background.getWidth(), this.background.getHeight());
+
+		World world = (World) game.getState(3);
+		context.setFont(this.font);
+		context.drawString("Score : " + world.getDinos()[0].getScore() / 1000, 750, 975);
 	}
 
 }

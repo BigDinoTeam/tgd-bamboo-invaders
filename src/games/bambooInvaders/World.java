@@ -1,7 +1,5 @@
 package games.bambooInvaders;
 
-import java.awt.*;
-
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -9,6 +7,8 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+
+import java.awt.*;
 
 public class World extends BasicGameState {
 
@@ -18,6 +18,7 @@ public class World extends BasicGameState {
 	private Grid grid;
 	private Dino firstDino;
 	private Dino lastDino;
+	private Dino[] dinos; // 1 ou 2 dinos
 
 	public World(int ID) {
 		this.ID = ID;
@@ -64,16 +65,32 @@ public class World extends BasicGameState {
 			game.enterState(2, new FadeOutTransition(), new FadeInTransition());
 		}
 		this.grid.update(container, game, delta);
-		this.firstDino.update(container, game, delta);
-		this.lastDino.update(container, game, delta);
+
+		for (Dino dino: dinos) {
+			dino.update(container, game, delta);
+		}
 
 		// Check winner/looser :
 		//TODO : loop through Dino check if a nest was bamboozled
 		//TODO : loop through Dino to check score
-		if(this.dino.getScore() / 1000 >= this.goalScore){
-			// TODO : launch win page with this dino as the winner. Reason : score
-			this.setState(3);
-			game.enterState(6 , new FadeOutTransition (), new FadeInTransition ());
+		for (Dino dino: dinos) {
+			if(dino.getNest().getBambooStage() == 2){ // Si bambou adulte dans le nid du Dino
+				this.setState(3);
+				if (dinos.length == 1){
+					game.enterState(5 , new FadeOutTransition (), new FadeInTransition ()); // Death page (if only one Dino)
+				} else{
+					game.enterState(6 , new FadeOutTransition (), new FadeInTransition ()); // Win page with the other Dino as winner
+					//TODO : mettre l'autre Dino en winner
+				}
+			}
+		}
+
+		for (Dino dino: dinos) { // Check win by score
+			if(dino.getScore() / 1000 >= this.goalScore){
+				// TODO : launch win page with this dino as the winner. Reason : score
+				this.setState(3);
+				game.enterState(6 , new FadeOutTransition (), new FadeInTransition ());
+			}
 		}
 	}
 
@@ -97,6 +114,7 @@ public class World extends BasicGameState {
 		/* Méthode exécutée une unique fois au début du jeu */
 		this.firstDino = new Dino(grid, false);
 		this.lastDino = new Dino(grid, true);
+		this.dinos = new Dino[]{this.firstDino, this.lastDino}; // TODO : gérer le cas d'un Dino en solo
 	}
 
 	public void pause(GameContainer container, StateBasedGame game) {

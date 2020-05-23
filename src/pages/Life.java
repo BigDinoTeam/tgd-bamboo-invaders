@@ -17,7 +17,7 @@ import app.AppPage;
 
 import games.bambooInvaders.World;
 
-public class Death extends AppPage {
+public class Life extends AppPage {
 
 	private Image background;
 	private Audio music;
@@ -26,12 +26,12 @@ public class Death extends AppPage {
 	private Color foregroundColor;
 	private Color borderColor;
 
-	public Death(int ID) {
+	public Life(int ID) {
 		super(ID);
 	}
 
 	public void init(GameContainer container, StateBasedGame game) {
-		this.background = AppLoader.loadPicture("/images/bambooInvaders/death.png");
+		this.background = AppLoader.loadPicture("/images/bambooInvaders/life.png");
 		this.music = AppLoader.loadAudio("/sounds/bambooInvaders/Le_bruit_dun_scorpion_qui_meurt.ogg");
 		this.font = AppLoader.loadFont("/fonts/bambooInvaders/ubuntu.ttf", AppFont.BOLD, container.getHeight() / 24);
 		this.backgroundColor = new Color(.8f, .8f, 1f);

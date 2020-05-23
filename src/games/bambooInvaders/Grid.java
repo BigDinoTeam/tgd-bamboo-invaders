@@ -62,8 +62,8 @@ public class Grid {
 	}
 
 	public Grid(String name, String multiplayer, String path) {
-		this.x = (int) ((Cell.getSize() * sqrt(3)) / 2); //TODO : changer en fonction du positionnement de l'interface graphique
-		this.y = Cell.getSize(); //TODO : changer en fonction du positionnement de l'interface graphique
+		this.x = (int) ((Cell.getSize() * sqrt(3)) / 2);
+		this.y = Cell.getSize();
 		this.name = name;
 		this.multiplayer = multiplayer != null;
 		String json = AppLoader.loadData(path);
@@ -150,18 +150,18 @@ public class Grid {
 		}
 		for (int i = 0; i < height; ++i) {
 			for (int j = 0; j < width; ++j) {
-				this.cells[i][j].update(container, game, delta);
+				this.cells[i][j].update(container, game, delta, this.random);
 			}
 		}
 	}
 
-	public void render(GameContainer container, StateBasedGame game, Graphics context, int scrollX, int scrollY) {
+	public void render(GameContainer container, StateBasedGame game, Graphics context, int scrollX, int scrollY, boolean foreground) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		for (int i = 0; i < height; ++i) {
 			for (int j = 0; j < width; ++j) {
 				int[] axialCoord = convertMemoryToAxialCoord(i, j);
 				Point cellDisplayCoord = getHexagonCoordinates(axialCoord[0], axialCoord[1]);
-				this.cells[i][j].render(container, game, context, cellDisplayCoord.x - scrollX, cellDisplayCoord.y - scrollY);
+				this.cells[i][j].render(container, game, context, cellDisplayCoord.x - scrollX, cellDisplayCoord.y - scrollY, foreground);
 			}
 		}
 	}

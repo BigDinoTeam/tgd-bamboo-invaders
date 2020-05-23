@@ -94,7 +94,7 @@ public class World extends BasicGameState {
 					game.enterState(5 , new FadeOutTransition (), new FadeInTransition ()); // Death page (if only one Dino)
 				} else{
 					this.winnerDino = 1 - i; // the other dino is the winner
-					this.winReason = "L'autre nid fut envahis par des bambous."; // Other nest bamboozled
+					this.winReason = "L'autre nid fut envahi par des bambous."; // Other nest bamboozled
 					game.enterState(7 , new FadeOutTransition (), new FadeInTransition ()); // WinMulti page with the other Dino as winner
 				}
 			}
@@ -125,19 +125,25 @@ public class World extends BasicGameState {
 		int height = container.getHeight();
 		if (!this.grid.isMultiplayer()) {
 			Point point = this.dinos[0].getPoint();
-			this.grid.render(container, game, context, point.x, point.y);
+			this.grid.render(container, game, context, point.x, point.y, false);
+			this.dinos[0].render(container, game, context, -width / 2, -height / 2, false);
+			this.grid.render(container, game, context, point.x, point.y, true);
 			this.dinos[0].render(container, game, context, -width / 2, -height / 2, true);
 			return;
 		}
 		Point firstPoint = this.dinos[0].getPoint();
 		Point lastPoint = this.dinos[1].getPoint();
 		context.setClip(0, 0, width / 2, height);
-		this.grid.render(container, game, context, firstPoint.x + width / 4, firstPoint.y);
+		this.grid.render(container, game, context, firstPoint.x + width / 4, firstPoint.y, false);
 		this.dinos[1].render(container, game, context, firstPoint.x - lastPoint.x - width / 4, firstPoint.y - lastPoint.y - height / 2, false);
+		this.dinos[0].render(container, game, context, -width / 4, -height / 2, false);
+		this.grid.render(container, game, context, firstPoint.x + width / 4, firstPoint.y, true);
 		this.dinos[0].render(container, game, context, -width / 4, -height / 2, true);
 		context.setClip(width / 2, 0, width / 2, height);
-		this.grid.render(container, game, context, lastPoint.x - width / 4, lastPoint.y);
+		this.grid.render(container, game, context, lastPoint.x - width / 4, lastPoint.y, false);
 		this.dinos[0].render(container, game, context, lastPoint.x - firstPoint.x - width * 3 / 4, lastPoint.y - firstPoint.y - height / 2, false);
+		this.dinos[1].render(container, game, context, -width * 3 / 4, -height / 2, false);
+		this.grid.render(container, game, context, lastPoint.x - width / 4, lastPoint.y, true);
 		this.dinos[1].render(container, game, context, -width * 3 / 4, -height / 2, true);
 		context.setClip(0, 0, width, height);
 		context.setColor(Color.black);

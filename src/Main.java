@@ -55,8 +55,8 @@ public final class Main {
 				this.addState(new games.bambooInvaders.World(3));
 				this.addState(new pages.Rules(4));
 				this.addState(new pages.Death(5));
-				this.addState(new pages.Win(6));
-				this.addState(new pages.WinMulti(7));
+				this.addState(new pages.Life(6));
+				this.addState(new pages.End(7));
 			}
 
 		};

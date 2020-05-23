@@ -6,6 +6,7 @@ import app.AppLoader;
 import java.awt.Point;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
@@ -18,7 +19,10 @@ public class Dino {
 	private Image dino;
 	private Image dino_down;
 	private Image gui;
-	private AppFont bambooFont;
+	private Font bambooFont;
+	private Color bambooColor;
+	private Font scoreFont;
+	private Color scoreColor;
 	private Audio eat;
 	private Audio splash;
 	private Audio regurgitate;
@@ -65,7 +69,10 @@ public class Dino {
 		this.eat = AppLoader.loadAudio("/sounds/bambooInvaders/mange.ogg");
 		this.regurgitate = AppLoader.loadAudio("/sounds/bambooInvaders/regurgite.ogg");
 		this.splash = AppLoader.loadAudio("/sounds/bambooInvaders/splash.ogg");
-		this.bambooFont = AppLoader.loadFont(null, AppFont.BOLD, 42);
+		this.bambooFont = AppLoader.loadFont("/fonts/bambooInvaders/ubuntu.ttf", AppFont.BOLD, 40);
+		this.bambooColor = new Color(.4f, .6f, .2f);
+		this.scoreFont = AppLoader.loadFont("/fonts/bambooInvaders/ubuntu.ttf", AppFont.BOLD, 20);
+		this.scoreColor = new Color(.8f, .8f, 1f);
 	}
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
@@ -83,18 +90,18 @@ public class Dino {
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context, int scrollX, int scrollY, boolean guiDisplayed) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		context.drawImage(
-			this.inAction ? dino_down : dino,
-			-Cell.getWidth() / 3 - scrollX,
-			-Cell.getHeight() / 3 - scrollY,
-			Cell.getWidth() / 3 - scrollX,
-			Cell.getHeight() / 3 - scrollY,
-			this.flipped ? dino.getWidth() : 0,
-			0,
-			this.flipped ? 0 : dino.getWidth(),
-			dino.getHeight()
-		);
 		if (!guiDisplayed) {
+			context.drawImage(
+				this.inAction ? dino_down : dino,
+				-Cell.getWidth() / 3 - scrollX,
+				-Cell.getHeight() / 3 - scrollY,
+				Cell.getWidth() / 3 - scrollX,
+				Cell.getHeight() / 3 - scrollY,
+				this.flipped ? dino.getWidth() : 0,
+				0,
+				this.flipped ? 0 : dino.getWidth(),
+				dino.getHeight()
+			);
 			return;
 		}
 		int guiX = this.reversed ? container.getWidth() - gui.getWidth() : 0;
@@ -108,12 +115,12 @@ public class Dino {
 			gui.getWidth(),
 			gui.getHeight()
 		);
-		context.setFont(bambooFont);
-		context.setColor(new Color(0x5c913b));
-		context.drawString(""+this.bambooCounter, guiX + 175, guiY + 6);
-		context.resetFont();
-		context.setColor(new Color(0x565656));
-		context.drawString("Score : "+this.score/1000, guiX + 125, guiY + 72);
+		context.setColor(this.bambooColor);
+		context.setFont(this.bambooFont);
+		context.drawString(""+this.bambooCounter, guiX + 175, guiY + 10);
+		context.setColor(this.scoreColor);
+		context.setFont(this.scoreFont);
+		context.drawString("Score : "+this.score/1000, guiX + 125, guiY + 70);
 	}
 
 	private int checkInput(GameContainer container, int delta) {

@@ -1,5 +1,7 @@
 package games.bambooInvaders;
 
+import java.util.Random;
+
 import app.AppLoader;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -120,6 +122,7 @@ public class Cell {
 	private Image[] bambooImages;
 	private int bambooStage;
 	private int bambooGauge;
+	private boolean flipped;
 
 	public Cell(int type) {
 		this.type = type;
@@ -132,7 +135,7 @@ public class Cell {
 		this.bambooGauge = 0;
 	}
 
-	public void update(GameContainer container, StateBasedGame game, int delta) {
+	public void update(GameContainer container, StateBasedGame game, int delta, Random random) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		if (!this.isFertile()) {
 			return;
@@ -149,18 +152,21 @@ public class Cell {
 			gauge -= threshold;
 			this.setBambooGauge(gauge);
 			this.setBambooStage(this.getBambooStage() + 1);
+			this.flipped = random.nextBoolean();
 		}
 	}
 
-	public void render(GameContainer container, StateBasedGame game, Graphics context, int x, int y) {
+	public void render(GameContainer container, StateBasedGame game, Graphics context, int x, int y, boolean bambooDisplayed) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		x += container.getWidth() / 2;
 		y += container.getHeight() / 2;
-		context.drawImage(this.background, x, y, x + getWidth(), y + getHeight(), 0,0, this.background.getWidth(), this.background.getHeight());
-
+		if (!bambooDisplayed) {
+			context.drawImage(this.background, x, y, x + getWidth(), y + getHeight(), 0,0, this.background.getWidth(), this.background.getHeight());
+			return;
+		}
 		if (this.bambooStage > 0){ // S'il y a un bamboo, on l'affiche
 			Image bambooImage = this.bambooImages[this.bambooStage-1];
-			context.drawImage(bambooImage, x, y, x + getWidth(), y + getHeight(), 0,0, bambooImage.getWidth(), bambooImage.getHeight()); // TODO : tester
+			context.drawImage(bambooImage, x, y, x + getWidth(), y + getHeight(), this.flipped ? bambooImage.getWidth() : 0, 0, this.flipped ? 0 : bambooImage.getWidth(), bambooImage.getHeight());
 		}
 	}
 

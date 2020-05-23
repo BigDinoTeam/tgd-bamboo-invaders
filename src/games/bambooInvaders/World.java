@@ -26,7 +26,8 @@ public class World extends BasicGameState {
 	private Audio worldMusic;
 	private float worldMusicPosition;
 	private Image worldBackground;
-	private Rectangle background;
+	private Rectangle worldClip;
+	private Color worldColor;
 
 	private int winnerDino;
 	private String winReason; // Whether the winner win by score or by surviving longer than its opponent
@@ -47,7 +48,8 @@ public class World extends BasicGameState {
 		/* Méthode exécutée une unique fois au chargement du programme */
 		this.worldMusic = AppLoader.loadAudio("/sounds/bambooInvaders/Tidal_Wave.ogg");
 		this.worldBackground = AppLoader.loadPicture("/images/bambooInvaders/background.png");
-		this.background = new Rectangle(0, 0, container.getWidth(), container.getHeight());
+		this.worldColor = new Color(0f, .2f, .4f);
+		this.worldClip = new Rectangle(0, 0, container.getWidth(), container.getHeight());
 	}
 
 	@Override
@@ -119,7 +121,8 @@ public class World extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		context.texture(background, worldBackground, true);
+		context.setColor(this.worldColor);
+		context.texture(this.worldClip, this.worldBackground, true);
 
 		int width = container.getWidth();
 		int height = container.getHeight();
@@ -145,7 +148,7 @@ public class World extends BasicGameState {
 		this.dinos[1].render(container, game, context, -width * 3 / 4, -height / 2, false);
 		this.grid.render(container, game, context, lastPoint.x - width / 4, lastPoint.y, true);
 		this.dinos[1].render(container, game, context, -width * 3 / 4, -height / 2, true);
-		context.setClip(0, 0, width, height);
+		context.clearClip();
 		context.setColor(Color.black);
 		context.setLineWidth(20);
 		context.drawLine(width / 2, 0, width / 2, height);

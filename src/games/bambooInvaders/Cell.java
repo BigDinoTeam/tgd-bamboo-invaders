@@ -166,7 +166,7 @@ public class Cell {
 		}
 		if (this.bambooStage > 0){ // S'il y a un bamboo, on l'affiche
 			Image bambooImage = this.bambooImages[this.bambooStage-1];
-			context.drawImage(bambooImage, x, y, x + getWidth(), y + getHeight(), this.flipped ? bambooImage.getWidth() : 0, 0, this.flipped ? 0 : bambooImage.getWidth(), bambooImage.getHeight());
+			context.drawImage(bambooImage, x + getWidth() * (this.flipped ? -1 : 1) / 4, y, x + getWidth() * (this.flipped ? 3 : 5) / 4, y + getHeight(), this.flipped ? bambooImage.getWidth() : 0, 0, this.flipped ? 0 : bambooImage.getWidth(), bambooImage.getHeight());
 		}
 	}
 

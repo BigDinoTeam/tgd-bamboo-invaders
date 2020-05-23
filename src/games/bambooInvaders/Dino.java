@@ -40,7 +40,7 @@ public class Dino {
 	private boolean inAction;
 
 	private final int timeRegurgiteBamboo = 50; // 50 ms
-	private final int countdownPerBamboo = 20; // 20 ms
+	private final int countdownPerBamboo = 50; // 50 ms
 
 	public Dino(Grid grid, boolean reversed) {
 		this.score = 0;
@@ -207,7 +207,7 @@ public class Dino {
 			this.splash.playAsSoundEffect(1, 1f, false);
 		}
 		int cooldown = (int) (this.bambooCounter * this.countdownPerBamboo + grid.getCell(i, j).getDinoActionDuration() / grid.getCell(i, j).getDinoSpeedCoefficient()) ;
-		if (cooldown > 3000) cooldown = 3000;
+		if (cooldown > 4000) cooldown = 4000;
 
 		return cooldown;
 	}

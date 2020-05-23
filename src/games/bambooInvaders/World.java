@@ -121,7 +121,7 @@ public class World extends BasicGameState {
 		this.firstDino = new Dino(grid, false);
 		this.lastDino = new Dino(grid, true);
 		if (!this.worldMusic.isPlaying()) {
-			this.worldMusic.playAsMusic(1, 0.8f, true);
+			this.worldMusic.playAsMusic(1, 0.4f, true);
 		}
 		this.dinos = new Dino[]{this.firstDino, this.lastDino}; // TODO : gérer le cas d'un Dino en solo
 	}
@@ -137,7 +137,7 @@ public class World extends BasicGameState {
 	public void resume(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée lors de la reprise du jeu */
 		if (!this.worldMusic.isPlaying()) {
-			this.worldMusic.playAsMusic(1, 0.8f, true);
+			this.worldMusic.playAsMusic(1, 0.4f, true);
 			this.worldMusic.setPosition(worldMusicPosition);
 		}
 	}

@@ -38,5 +38,10 @@
 		"bamboo_gauge_coefficients": [.5, .75, 1],
 		"dino_action_duration": 1500,
 		"dino_speed_coefficients": [1, .75, .25]
+	},
+	{
+		"id": 4,
+		"name": "Montagne",
+		"background": "/images/bambooInvaders/cells/montagne.png"
 	}
 ]

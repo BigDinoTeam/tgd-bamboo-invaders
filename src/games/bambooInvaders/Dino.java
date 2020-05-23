@@ -20,6 +20,7 @@ public class Dino {
 	private int j;
 	private int nextI;
 	private int nextJ;
+	private boolean flip;
 	private Grid grid;
 	private int score;
 	private boolean isRegurgitating;
@@ -36,6 +37,7 @@ public class Dino {
 		this.j = ij[1];
 		this.nextI = ij[0];
 		this.nextJ = ij[1];
+		this.flip = false;
 		this.initialActionCountdown = 0;
 		this.actionCountdown = 0;
 		this.bambooCounter = 0;
@@ -64,9 +66,9 @@ public class Dino {
 			container.getHeight() / 2 - Cell.getHeight() / 3,
 			container.getWidth() / 2 + Cell.getWidth() / 3,
 			container.getHeight() / 2 + Cell.getHeight() / 3,
+			this.flip ? dino.getWidth() : 0,
 			0,
-			0,
-			dino.getWidth(),
+			this.flip ? 0 : dino.getWidth(),
 			dino.getHeight()
 		);
 	}
@@ -120,23 +122,29 @@ public class Dino {
 		switch (direction) {
 		case 0:
 			--this.nextI;
+			this.flip = false;
 			break;
 		case 1:
 			--this.nextI;
 			++this.nextJ;
+			this.flip = true;
 			break;
 		case 2:
 			++this.nextJ;
+			this.flip = true;
 			break;
 		case 3:
 			++this.nextI;
+			this.flip = true;
 			break;
 		case 4:
 			++this.nextI;
 			--this.nextJ;
+			this.flip = false;
 			break;
 		case 5:
 			--this.nextJ;
+			this.flip = false;
 			break;
 		}
 

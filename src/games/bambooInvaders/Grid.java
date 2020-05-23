@@ -216,7 +216,7 @@ public class Grid {
 				if (cell.getType() != 0) {
 					continue;
 				}
-				return new int[]{i, j};
+				return convertMemoryToAxialCoord(i, j);
 			}
 		}
 		return new int[]{0, 0};

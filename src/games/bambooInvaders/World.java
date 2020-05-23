@@ -5,10 +5,13 @@ import java.awt.*;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+
+import app.AppLoader;
 
 public class World extends BasicGameState {
 
@@ -17,6 +20,8 @@ public class World extends BasicGameState {
 	private Grid grid;
 	private Dino firstDino;
 	private Dino lastDino;
+	private Audio worldMusic;
+	private float worldMusicPosition;
 
 	public World(int ID) {
 		this.ID = ID;
@@ -31,6 +36,7 @@ public class World extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au chargement du programme */
+		this.worldMusic = AppLoader.loadAudio("/sounds/bambooInvaders/Tidal_Wave.mp3");
 	}
 
 	@Override
@@ -87,18 +93,32 @@ public class World extends BasicGameState {
 		/* Méthode exécutée une unique fois au début du jeu */
 		this.firstDino = new Dino(grid, false);
 		this.lastDino = new Dino(grid, true);
+		if (!this.worldMusic.isPlaying()) {
+			this.worldMusic.playAsMusic(1, 0.8f, true);
+		}
 	}
 
 	public void pause(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée lors de la mise en pause du jeu */
+		if (this.worldMusic.isPlaying()) {
+			this.worldMusicPosition = this.worldMusic.getPosition();
+			this.worldMusic.stop();
+		}
 	}
 
 	public void resume(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée lors de la reprise du jeu */
+		if (!this.worldMusic.isPlaying()) {
+			this.worldMusic.playAsMusic(1, 0.8f, true);
+			this.worldMusic.setPosition(worldMusicPosition);
+		}
 	}
 
 	public void stop(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois à la fin du jeu */
+		if (this.worldMusic.isPlaying()) {
+			this.worldMusic.stop();
+		}
 	}
 
 	public void setState(int state) {

@@ -28,7 +28,7 @@ public class Dino {
 	public Dino(Grid grid) {
 		this.score = 0;
 		this.grid = grid;
-		int[] ij = grid.findNest();
+		int[] ij = grid.findNestPlace();
 		this.i = ij[0];
 		this.j = ij[1];
 		this.actionCountdown = 0;
@@ -48,13 +48,17 @@ public class Dino {
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		Point p = this.grid.getHexagonCenter(i, j);
-
 		context.drawImage(
-					dino,
-					(float) p.getX() - Cell.getWidth()/3, (float) p.getY() - Cell.getHeight()/3, (float) p.getX() + Cell.getWidth()/3, (float) p.getY() + Cell.getHeight()/3,
-					0, 0, dino.getWidth(), dino.getHeight()
-				);
+			dino,
+			container.getWidth() / 2 - Cell.getWidth() / 3,
+			container.getHeight() / 2 - Cell.getHeight() / 3,
+			container.getWidth() / 2 + Cell.getWidth() / 3,
+			container.getHeight() / 2 + Cell.getHeight() / 3,
+			0,
+			0,
+			dino.getWidth(),
+			dino.getHeight()
+		);
 
 		// TODO : animation de déplacement ?
 	}
@@ -133,7 +137,7 @@ public class Dino {
 			break;
 		}
 
-		if (grid.getCell(new_i, new_j).getType() == 4) return 0; // La case n'est pas accessible
+		if (grid.getCell(new_i, new_j).getDinoSpeedCoefficient() == 0) return 0; // La case n'est pas accessible
 
 		this.i = new_i;
 		this.j = new_j;
@@ -157,5 +161,9 @@ public class Dino {
 		} else {
 			this.timeRegurgitating = 0;
 		}
+	}
+
+	public Point getPoint() {
+		return this.grid.getHexagonCenter(this.i, this.j);
 	}
 }

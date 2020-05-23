@@ -18,7 +18,7 @@ import java.awt.Point;
 
 public class World extends BasicGameState {
 
-	private static int goalScore = 1500; // Score to reach to win
+	private static int goalScore = 300; // Score to reach to win
 	private int ID;
 	private int state;
 	private Grid grid;

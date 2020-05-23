@@ -1,12 +1,7 @@
 [
 	{
 		"id": 0,
-		"name": "Niveau de test",
-		"path": "/data/bambooInvaders/grids/test.json"
-	},
-	{
-		"id": 0,
-		"name": "Forêt",
-		"path": "/data/bambooInvaders/grids/forest.json"
+		"name": "Delta",
+		"path": "/data/bambooInvaders/grids/delta.json"
 	}
 ]

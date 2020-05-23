@@ -209,4 +209,17 @@ public class Grid {
 		return new Point(hexagonCenter.x - Cell.getWidth() / 2, hexagonCenter.y - Cell.getHeight() / 2) ;
 	}
 
+	public int[] findNest() {
+		for (int i = 0, li = this.cells.length; i < li; ++i) {
+			for (int j = 0, lj = this.cells[i].length; j < lj; ++j) {
+				Cell cell = this.cells[i][j];
+				if (cell.getType() != 0) {
+					continue;
+				}
+				return new int[]{i, j};
+			}
+		}
+		return new int[]{0, 0};
+	}
+
 }

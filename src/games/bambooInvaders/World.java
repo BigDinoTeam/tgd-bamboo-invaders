@@ -80,7 +80,8 @@ public class World extends BasicGameState {
 	public void play(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au début du jeu */
 		// TODO : choix du nombre de joueurs et points de spawn
-		dinos.add(new Dino(grid, 0, 0));
+		dinos.clear();
+		dinos.add(new Dino(grid));
 	}
 
 	public void pause(GameContainer container, StateBasedGame game) {

@@ -26,12 +26,14 @@ public class Dino {
 	private int bambooCounter;
 	private int initialActionCountdown;
 	private int actionCountdown;
+	private Grid grid;
+	private Cell nest;
 	private int i;
 	private int j;
 	private int nextI;
 	private int nextJ;
-	private boolean flip;
-	private Grid grid;
+	private boolean reversed;
+	private boolean flipped;
 	private int score;
 	private boolean isRegurgitating;
 	private int timeRegurgitating;
@@ -40,15 +42,17 @@ public class Dino {
 	private final int timeRegurgiteBamboo = 50; // 50 ms
 	private final int countdownPerBamboo = 20; // 20 ms
 
-	public Dino(Grid grid) {
+	public Dino(Grid grid, boolean reversed) {
 		this.score = 0;
 		this.grid = grid;
-		int[] ij = grid.findNestPlace();
+		int[] ij = grid.findNestPlace(reversed);
+		this.nest = grid.getCell(ij[0], ij[1]);
 		this.i = ij[0];
 		this.j = ij[1];
 		this.nextI = ij[0];
 		this.nextJ = ij[1];
-		this.flip = false;
+		this.reversed = reversed;
+		this.flipped = !reversed;
 		this.initialActionCountdown = 0;
 		this.actionCountdown = 0;
 		this.bambooCounter = 0;
@@ -80,29 +84,34 @@ public class Dino {
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		context.drawImage(
-				this.inAction ? dino_down : dino,
-				container.getWidth() / 2 - Cell.getWidth() / 3,
-				container.getHeight() / 2 - Cell.getHeight() / 3,
-				container.getWidth() / 2 + Cell.getWidth() / 3,
-				container.getHeight() / 2 + Cell.getHeight() / 3,
-				this.flip ? dino.getWidth() : 0,
-				0,
-				this.flip ? 0 : dino.getWidth(),
-				dino.getHeight()
-			);
+			this.inAction ? dino_down : dino,
+			container.getWidth() * (this.reversed ? 3 : 1) / 4 - Cell.getWidth() / 3,
+			container.getHeight() / 2 - Cell.getHeight() / 3,
+			container.getWidth() * (this.reversed ? 3 : 1) / 4 + Cell.getWidth() / 3,
+			container.getHeight() / 2 + Cell.getHeight() / 3,
+			this.flipped ? dino.getWidth() : 0,
+			0,
+			this.flipped ? 0 : dino.getWidth(),
+			dino.getHeight()
+		);
 		// TODO : animation de déplacement ?
-		
+		int guiX = this.reversed ? container.getWidth() - gui.getWidth() : 0;
+		int guiY = container.getHeight() - gui.getHeight();
 		context.drawImage(
-				gui,
-				0, container.getHeight() - gui.getHeight(),
-				0, 0, gui.getWidth(), gui.getHeight()
-			);
+			gui,
+			guiX,
+			guiY,
+			0,
+			0,
+			gui.getWidth(),
+			gui.getHeight()
+		);
 		context.setFont(bambooFont);
 		context.setColor(new Color(0x5c913b));
-		context.drawString(""+this.bambooCounter, 175, container.getHeight() - gui.getHeight() + 6);
+		context.drawString(""+this.bambooCounter, guiX + 175, guiY + 6);
 		context.resetFont();
 		context.setColor(new Color(0x565656));
-		context.drawString("Score : "+this.score/1000, 125, container.getHeight() - gui.getHeight() + 72);
+		context.drawString("Score : "+this.score/1000, guiX + 125, guiY + 72);
 	}
 
 	private int checkInput(GameContainer container, int delta) {
@@ -116,7 +125,7 @@ public class Dino {
 		if (input.isKeyDown(Input.KEY_S)) {
 			// Regurgite si dans un nid
 			Cell cell = grid.getCell(i, j);
-			if (cell.getType() == 0  && this.bambooCounter > 0) {
+			if (cell == this.nest && this.bambooCounter > 0) {
 				isRegurgitating = true;
 				inAction = true;
 				if (this.timeRegurgitating == 0) {
@@ -124,7 +133,7 @@ public class Dino {
 				}
 			}
 			// Mange les bambous s'il y en a
-			else {
+			else if (cell.getType() != 0){
 				int stage = cell.getBambooStage();
 				if (stage > 0) {
 					this.eat.playAsSoundEffect(1, .6f, false);
@@ -135,17 +144,17 @@ public class Dino {
 				}
 			}
 
-		} else if (input.isKeyDown(Input.KEY_Z)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_I : Input.KEY_Z)) {
 			return move(0);
-		} else if (input.isKeyDown(Input.KEY_E)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_O : Input.KEY_E)) {
 			return move(1);
-		} else if (input.isKeyDown(Input.KEY_D)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_L : Input.KEY_D)) {
 			return move(2);
-		} else if (input.isKeyDown(Input.KEY_X)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_SEMICOLON: Input.KEY_X)) {
 			return move(3);
-		} else if (input.isKeyDown(Input.KEY_W)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_COMMA: Input.KEY_W)) {
 			return move(4);
-		} else if (input.isKeyDown(Input.KEY_Q)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_J : Input.KEY_Q)) {
 			return move(5);
 		}
 
@@ -160,29 +169,29 @@ public class Dino {
 		switch (direction) {
 		case 0:
 			--this.nextI;
-			this.flip = false;
+			this.flipped = false;
 			break;
 		case 1:
 			--this.nextI;
 			++this.nextJ;
-			this.flip = true;
+			this.flipped = true;
 			break;
 		case 2:
 			++this.nextJ;
-			this.flip = true;
+			this.flipped = true;
 			break;
 		case 3:
 			++this.nextI;
-			this.flip = true;
+			this.flipped = true;
 			break;
 		case 4:
 			++this.nextI;
 			--this.nextJ;
-			this.flip = false;
+			this.flipped = false;
 			break;
 		case 5:
 			--this.nextJ;
-			this.flip = false;
+			this.flipped = false;
 			break;
 		}
 
@@ -229,4 +238,9 @@ public class Dino {
 		int y = (point.y * this.actionCountdown + nextPoint.y * (this.initialActionCountdown - this.actionCountdown)) / this.initialActionCountdown;
 		return new Point(x, y);
 	}
+
+	public Cell getNest() {
+		return this.nest;
+	}
+
 }

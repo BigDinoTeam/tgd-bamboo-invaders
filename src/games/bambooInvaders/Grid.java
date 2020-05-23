@@ -9,6 +9,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
 
 import java.awt.*;
+import java.util.Random;
 
 import static java.lang.Math.floor;
 import static java.lang.Math.sqrt;
@@ -21,6 +22,7 @@ public class Grid {
 	private Cell[][] cells;
 	private int x;
 	private int y;
+	private Random random;
 
 	public static void load(String filename) {
 		String json = AppLoader.loadData(filename);
@@ -88,11 +90,61 @@ public class Grid {
 			}
 		}
 		this.cells = cells;
+		this.random = new Random();
 	}
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		//TODO
+		for (int i = 0, li = this.cells.length; i < li; ++i) {
+			for (int j = 0, lj = this.cells[i].length; j < lj; ++j) {
+				Cell cell = this.cells[i][j];
+				float coefficient = cell.getBambooGaugeCoefficient();
+				int[] cellPlace = Grid.convertMemoryToAxialCoord(i, j);
+				for (int k = 0; k < 6; ++k) {
+					int[] neighborPlace = new int[]{cellPlace[0], cellPlace[1]};
+					switch (k) {
+						case 0: {
+							--neighborPlace[0];
+							break;
+						}
+						case 1: {
+							--neighborPlace[0];
+							++neighborPlace[1];
+							break;
+						}
+						case 2: {
+							++neighborPlace[1];
+							break;
+						}
+						case 3: {
+							++neighborPlace[0];
+							break;
+						}
+						case 4: {
+							++neighborPlace[0];
+							--neighborPlace[1];
+							break;
+						}
+						case 5: {
+							--neighborPlace[1];
+							break;
+						}
+					}
+					int[] neighborIJ = Grid.convertAxialToMemoryCoord(neighborPlace[0], neighborPlace[1]);
+					try {
+						Cell neighbor = this.cells[neighborIJ[0]][neighborIJ[1]];
+						int bambooGauge = neighbor.getBambooGauge();
+						bambooGauge += this.random.nextInt(delta + 1) * coefficient;
+						neighbor.setBambooGauge(bambooGauge);
+					} catch (Exception exception) {}
+				}
+			}
+		}
+		for (int i = 0, li = this.cells.length; i < li; ++i) {
+			for (int j = 0, lj = this.cells[i].length; j < lj; ++j) {
+				this.cells[i][j].update(container, game, delta);
+			}
+		}
 	}
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {

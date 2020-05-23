@@ -128,7 +128,22 @@ public class Cell {
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		//TODO
+		if (!this.isFertile()) {
+			return;
+		}
+		for (;;) {
+			int threshold = this.getNextBambooThreshold();
+			if (threshold == -1) {
+				return;
+			}
+			int gauge = this.getBambooGauge();
+			if (gauge < threshold) {
+				return;
+			}
+			gauge -= threshold;
+			this.setBambooGauge(gauge);
+			this.setBambooStage(this.getBambooStage() + 1);
+		}
 	}
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context, int x, int y) {
@@ -146,10 +161,10 @@ public class Cell {
 		if (this.bambooStage == 2){
 			return -1; // No next threshold
 		}
-		return bambooThresholds[this.type][this.bambooStage + 1];
+		return bambooThresholds[this.type][this.bambooStage];
 	}
 
-	public float getCurrentBambooGaugeCoefficient(){
+	public float getBambooGaugeCoefficient(){
 		return bambooGaugeCoefficients[this.type][this.bambooStage];
 	}
 
@@ -169,8 +184,16 @@ public class Cell {
 		return this.background;
 	}
 
+	public void setBambooStage(int bambouStage) {
+		this.bambooStage = bambouStage;
+	}
+
 	public int getBambooStage() {
 		return this.bambooStage;
+	}
+
+	public void setBambooGauge(int bambooGauge) {
+		this.bambooGauge = bambooGauge;
 	}
 
 	public int getBambooGauge() {

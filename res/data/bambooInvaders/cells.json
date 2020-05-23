@@ -3,6 +3,9 @@
 		"id": 0,
 		"name": "Nid",
 		"background": "/images/bambooInvaders/cells/nid.png",
+		"fertility": true,
+		"bamboo_thresholds": [10000, 10000],
+		"bamboo_gauge_coefficients": [0, 0, 0],
 		"dino_action_duration": 300,
 		"dino_speed_coefficients": [1, .75, .25]
 	},
@@ -10,6 +13,9 @@
 		"id": 1,
 		"name": "Sable",
 		"background": "/images/bambooInvaders/cells/sable.png",
+		"fertility": true,
+		"bamboo_thresholds": [4000, 2000],
+		"bamboo_gauge_coefficients": [0, .25, .5],
 		"dino_action_duration": 500,
 		"dino_speed_coefficients": [1, .75, .25]
 	},
@@ -17,6 +23,9 @@
 		"id": 2,
 		"name": "Herbe",
 		"background": "/images/bambooInvaders/cells/herbe.png",
+		"fertility": true,
+		"bamboo_thresholds": [4000, 2000],
+		"bamboo_gauge_coefficients": [.25, .5, .75],
 		"dino_action_duration": 300,
 		"dino_speed_coefficients": [1, .75, .25]
 	},
@@ -24,6 +33,9 @@
 		"id": 3,
 		"name": "Eau",
 		"background": "/images/bambooInvaders/cells/eau.png",
+		"fertility": true,
+		"bamboo_thresholds": [4000, 2000],
+		"bamboo_gauge_coefficients": [.5, .75, 1],
 		"dino_action_duration": 1500,
 		"dino_speed_coefficients": [1, .75, .25]
 	}

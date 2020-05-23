@@ -8,7 +8,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.StateBasedGame;
 
-import java.awt.*;
+import java.awt.Point;
 import java.util.Random;
 
 import static java.lang.Math.floor;

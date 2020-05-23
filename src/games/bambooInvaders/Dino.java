@@ -81,20 +81,22 @@ public class Dino {
 		}
 	}
 
-	public void render(GameContainer container, StateBasedGame game, Graphics context) {
+	public void render(GameContainer container, StateBasedGame game, Graphics context, int scrollX, int scrollY, boolean guiDisplayed) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		context.drawImage(
 			this.inAction ? dino_down : dino,
-			container.getWidth() * (this.reversed ? 3 : 1) / 4 - Cell.getWidth() / 3,
-			container.getHeight() / 2 - Cell.getHeight() / 3,
-			container.getWidth() * (this.reversed ? 3 : 1) / 4 + Cell.getWidth() / 3,
-			container.getHeight() / 2 + Cell.getHeight() / 3,
+			-Cell.getWidth() / 3 - scrollX,
+			-Cell.getHeight() / 3 - scrollY,
+			Cell.getWidth() / 3 - scrollX,
+			Cell.getHeight() / 3 - scrollY,
 			this.flipped ? dino.getWidth() : 0,
 			0,
 			this.flipped ? 0 : dino.getWidth(),
 			dino.getHeight()
 		);
-		// TODO : animation de déplacement ?
+		if (!guiDisplayed) {
+			return;
+		}
 		int guiX = this.reversed ? container.getWidth() - gui.getWidth() : 0;
 		int guiY = container.getHeight() - gui.getHeight();
 		context.drawImage(
@@ -122,7 +124,7 @@ public class Dino {
 		}
 		this.isRegurgitating = false;
 
-		if (input.isKeyDown(Input.KEY_S)) {
+		if (input.isKeyDown(this.reversed ? Input.KEY_L : Input.KEY_S)) {
 			// Regurgite si dans un nid
 			Cell cell = grid.getCell(i, j);
 			if (cell == this.nest && this.bambooCounter > 0) {
@@ -144,17 +146,17 @@ public class Dino {
 				}
 			}
 
-		} else if (input.isKeyDown(this.reversed ? Input.KEY_I : Input.KEY_Z)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_O : Input.KEY_Z)) {
 			return move(0);
-		} else if (input.isKeyDown(this.reversed ? Input.KEY_O : Input.KEY_E)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_P : Input.KEY_E)) {
 			return move(1);
-		} else if (input.isKeyDown(this.reversed ? Input.KEY_L : Input.KEY_D)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_M : Input.KEY_D)) {
 			return move(2);
-		} else if (input.isKeyDown(this.reversed ? Input.KEY_SEMICOLON: Input.KEY_X)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_COLON: Input.KEY_X)) {
 			return move(3);
-		} else if (input.isKeyDown(this.reversed ? Input.KEY_COMMA: Input.KEY_W)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_SEMICOLON: Input.KEY_W)) {
 			return move(4);
-		} else if (input.isKeyDown(this.reversed ? Input.KEY_J : Input.KEY_Q)) {
+		} else if (input.isKeyDown(this.reversed ? Input.KEY_K : Input.KEY_Q)) {
 			return move(5);
 		}
 

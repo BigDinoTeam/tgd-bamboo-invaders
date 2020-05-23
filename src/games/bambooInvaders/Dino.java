@@ -19,9 +19,13 @@ public class Dino {
 	private AppFont bambooFont;
 
 	private int bambooCounter;
+	private int initialActionCountdown;
 	private int actionCountdown;
 	private int i;
 	private int j;
+	private int nextI;
+	private int nextJ;
+	private boolean flip;
 	private Grid grid;
 	private int score;
 	private boolean isRegurgitating;
@@ -33,9 +37,13 @@ public class Dino {
 	public Dino(Grid grid) {
 		this.score = 0;
 		this.grid = grid;
-		int[] ij = grid.findNest();
+		int[] ij = grid.findNestPlace();
 		this.i = ij[0];
 		this.j = ij[1];
+		this.nextI = ij[0];
+		this.nextJ = ij[1];
+		this.flip = false;
+		this.initialActionCountdown = 0;
 		this.actionCountdown = 0;
 		this.bambooCounter = 0;
 		this.timeRegurgitating = 0;
@@ -50,18 +58,26 @@ public class Dino {
 		this.score += delta;
 
 		this.actionCountdown -= delta;
-		if (this.actionCountdown <= 0) this.actionCountdown = checkInput(container,delta);
+		if (this.actionCountdown <= 0) {
+			this.i = this.nextI;
+			this.j = this.nextJ;
+			this.actionCountdown = this.initialActionCountdown = checkInput(container,delta);
+		}
 	}
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		Point p = this.grid.getHexagonCenter(i, j);
-
 		context.drawImage(
-					dino,
-					(float) p.getX() - Cell.getWidth()/3, (float) p.getY() - Cell.getHeight()/3, (float) p.getX() + Cell.getWidth()/3, (float) p.getY() + Cell.getHeight()/3,
-					0, 0, dino.getWidth(), dino.getHeight()
-				);
+				dino,
+				container.getWidth() / 2 - Cell.getWidth() / 3,
+				container.getHeight() / 2 - Cell.getHeight() / 3,
+				container.getWidth() / 2 + Cell.getWidth() / 3,
+				container.getHeight() / 2 + Cell.getHeight() / 3,
+				this.flip ? dino.getWidth() : 0,
+				0,
+				this.flip ? 0 : dino.getWidth(),
+				dino.getHeight()
+			);
 		// TODO : animation de déplacement ?
 		
 		context.drawImage(
@@ -123,38 +139,43 @@ public class Dino {
 	}
 
 	private int move(int direction) {
-		int cooldown = (int) ((this.bambooCounter * this.countdownPerBamboo + grid.getCell(i, j).getDinoActionDuration()) / grid.getCell(i, j).getDinoSpeedCoefficient()) ;
-		if (cooldown > 3000) cooldown = 3000;
-
-		int new_i = this.i;
-		int new_j = this.j;
 		switch (direction) {
 		case 0:
-			new_i = this.i-1;
+			--this.nextI;
+			this.flip = false;
 			break;
 		case 1:
-			new_i = this.i-1;
-			new_j = this.j+1;
+			--this.nextI;
+			++this.nextJ;
+			this.flip = true;
 			break;
 		case 2:
-			new_j = this.j+1;
+			++this.nextJ;
+			this.flip = true;
 			break;
 		case 3:
-			new_i = this.i+1;
+			++this.nextI;
+			this.flip = true;
 			break;
 		case 4:
-			new_i = this.i+1;
-			new_j = this.j-1;
+			++this.nextI;
+			--this.nextJ;
+			this.flip = false;
 			break;
 		case 5:
-			new_j = this.j-1;
+			--this.nextJ;
+			this.flip = false;
 			break;
 		}
 
-		if (grid.getCell(new_i, new_j).getType() == 4) return 0; // La case n'est pas accessible
-
-		this.i = new_i;
-		this.j = new_j;
+		Cell nextCell = grid.getCell(this.nextI, this.nextJ);
+		if (nextCell == null || nextCell.getDinoSpeedCoefficient() == 0) { // La case n'est pas accessible
+			this.nextI = this.i;
+			this.nextJ = this.j;
+			return 0;
+		}
+		int cooldown = (int) ((this.bambooCounter * this.countdownPerBamboo + grid.getCell(i, j).getDinoActionDuration()) / grid.getCell(i, j).getDinoSpeedCoefficient()) ;
+		if (cooldown > 3000) cooldown = 3000;
 
 		return cooldown;
 	}
@@ -175,5 +196,16 @@ public class Dino {
 		} else {
 			this.timeRegurgitating = 0;
 		}
+	}
+
+	public Point getPoint() {
+		Point point = this.grid.getHexagonCenter(this.i, this.j);
+		if (this.initialActionCountdown == 0) {
+			return point;
+		}
+		Point nextPoint = this.grid.getHexagonCenter(this.nextI, this.nextJ);
+		int x = (point.x * this.actionCountdown + nextPoint.x * (this.initialActionCountdown - this.actionCountdown)) / this.initialActionCountdown;
+		int y = (point.y * this.actionCountdown + nextPoint.y * (this.initialActionCountdown - this.actionCountdown)) / this.initialActionCountdown;
+		return new Point(x, y);
 	}
 }

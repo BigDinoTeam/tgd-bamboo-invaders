@@ -154,12 +154,12 @@ public class Cell {
 
 	public void render(GameContainer container, StateBasedGame game, Graphics context, int x, int y) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		//TODO
-
+		x += container.getWidth() / 2;
+		y += container.getHeight() / 2;
 		context.drawImage(this.background, x, y, x + getWidth(), y + getHeight(), 0,0, this.background.getWidth(), this.background.getHeight());
 
 		if (this.bambooStage > 0){ // S'il y a un bamboo, on l'affiche
-			Image bambooImage = this.bambooImages[this.bambooStage-1]; // TODO : tester
+			Image bambooImage = this.bambooImages[this.bambooStage-1];
 			context.drawImage(bambooImage, x, y, x + getWidth(), y + getHeight(), 0,0, bambooImage.getWidth(), bambooImage.getHeight()); // TODO : tester
 		}
 	}

@@ -147,13 +147,13 @@ public class Grid {
 		}
 	}
 
-	public void render(GameContainer container, StateBasedGame game, Graphics context) {
+	public void render(GameContainer container, StateBasedGame game, Graphics context, int scrollX, int scrollY) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		for (int i = 0; i < this.cells.length; i++) {
 			for (int j = 0; j < this.cells[i].length; j++) {
 				int[] axialCoord = convertMemoryToAxialCoord(i, j);
 				Point cellDisplayCoord = getHexagonCoordinates(axialCoord[0], axialCoord[1]);
-				this.cells[i][j].render(container, game, context, cellDisplayCoord.x, cellDisplayCoord.y);
+				this.cells[i][j].render(container, game, context, cellDisplayCoord.x - scrollX, cellDisplayCoord.y - scrollY);
 			}
 		}
 	}
@@ -209,14 +209,14 @@ public class Grid {
 		return new Point(hexagonCenter.x - Cell.getWidth() / 2, hexagonCenter.y - Cell.getHeight() / 2) ;
 	}
 
-	public int[] findNest() {
+	public int[] findNestPlace() {
 		for (int i = 0, li = this.cells.length; i < li; ++i) {
 			for (int j = 0, lj = this.cells[i].length; j < lj; ++j) {
 				Cell cell = this.cells[i][j];
 				if (cell.getType() != 0) {
 					continue;
 				}
-				return new int[]{i, j};
+				return convertMemoryToAxialCoord(i, j);
 			}
 		}
 		return new int[]{0, 0};

@@ -28,7 +28,7 @@ public class WinMulti extends AppPage {
 	@Override
 	public void enter(GameContainer container, StateBasedGame game) {
 		if (!this.music.isPlaying()) {
-			this.music.playAsMusic(1, .4f, true);
+			this.music.playAsMusic(1, .4f, false);
 		}
 	}
 

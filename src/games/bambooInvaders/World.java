@@ -1,7 +1,5 @@
 package games.bambooInvaders;
 
-import java.awt.Point;
-
 import app.AppLoader;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -11,6 +9,8 @@ import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
+
+import java.awt.*;
 
 
 public class World extends BasicGameState {
@@ -24,6 +24,10 @@ public class World extends BasicGameState {
 	private Dino[] dinos; // 1 ou 2 dinos
 	private Audio worldMusic;
 	private float worldMusicPosition;
+
+	private int winnerDino;
+	private String winReason; // Whether the winner win by score or by surviving longer than its opponent
+
 
 	public World(int ID) {
 		this.ID = ID;
@@ -77,25 +81,32 @@ public class World extends BasicGameState {
 		}
 
 		// Check winner/looser :
-		//TODO : loop through Dino check if a nest was bamboozled
-		//TODO : loop through Dino to check score
-		for (Dino dino: dinos) {
+		for (int i = 0; i < dinos.length; i++) { // Check if a nest was bamboozled
+			Dino dino = dinos[i];
 			if(dino.getNest().getBambooStage() == 2){ // Si bambou adulte dans le nid du Dino
 				this.setState(3);
 				if (dinos.length == 1){
 					game.enterState(5 , new FadeOutTransition (), new FadeInTransition ()); // Death page (if only one Dino)
 				} else{
-					game.enterState(6 , new FadeOutTransition (), new FadeInTransition ()); // Win page with the other Dino as winner
-					//TODO : mettre l'autre Dino en winner
+					this.winnerDino = 1 - i; // the other dino is the winner
+					this.winReason = "L'autre nid a été envahis par des bambous."; // Other nest bamboozled
+					game.enterState(7 , new FadeOutTransition (), new FadeInTransition ()); // WinMulti page with the other Dino as winner
 				}
 			}
 		}
 
-		for (Dino dino: dinos) { // Check win by score
+
+		for (int i = 0; i < dinos.length; i++) { // Check win by score
+			Dino dino = dinos[i];
 			if(dino.getScore() / 1000 >= this.goalScore){
-				// TODO : launch win page with this dino as the winner. Reason : score
 				this.setState(3);
-				game.enterState(6 , new FadeOutTransition (), new FadeInTransition ());
+				if (dinos.length == 1){
+					game.enterState(6 , new FadeOutTransition (), new FadeInTransition ()); // Win page (if only one Dino)
+				} else{
+					this.winnerDino = i; // this dino is the winner
+					this.winReason = "Score maximal atteint !";
+					game.enterState(7 , new FadeOutTransition (), new FadeInTransition ()); // WinMulti page
+				}
 			}
 		}
 	}

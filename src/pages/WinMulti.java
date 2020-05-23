@@ -44,6 +44,7 @@ public class WinMulti extends AppPage {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		context.drawImage(this.background, 0, 0, container.getWidth(), container.getHeight(), 0, 0, this.background.getWidth(), this.background.getHeight());
+
 	}
 
 }

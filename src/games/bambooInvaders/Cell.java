@@ -13,7 +13,8 @@ import static java.lang.Math.sqrt;
 
 public class Cell {
 
-	private static Image[] bamboos;
+
+	private static String[] bamboos = {"/images/bambooInvaders/bamboos/bamboo_young.png", "/images/bambooInvaders/bamboos/bamboo_young.png"};
 	private static String[] names;
 	private static String[] backgrounds;
 	private static boolean[] fertilities;
@@ -116,12 +117,17 @@ public class Cell {
 
 	private int type;
 	private Image background;
+	private Image[] bambooImages;
 	private int bambooStage;
 	private int bambooGauge;
 
 	public Cell(int type) {
 		this.type = type;
 		this.background = AppLoader.loadPicture(backgrounds[type]);
+		this.bambooImages = new Image[2];
+		for (int i = 0; i < bamboos.length; i++) {
+			this.bambooImages[i] = AppLoader.loadPicture(bamboos[i]);
+		}
 		this.bambooStage = 0;
 		this.bambooGauge = 0;
 	}
@@ -134,8 +140,13 @@ public class Cell {
 	public void render(GameContainer container, StateBasedGame game, Graphics context, int x, int y) {
 		/* Méthode exécutée environ 60 fois par seconde */
 		//TODO
-		Image background = getBackground();
-		context.drawImage(background, x, y, x + getWidth(), y + getHeight(), 0,0, background.getWidth(), background.getHeight());
+
+		context.drawImage(this.background, x, y, x + getWidth(), y + getHeight(), 0,0, this.background.getWidth(), this.background.getHeight());
+
+		if (this.bambooStage > 0){ // S'il y a un bamboo, on l'affiche
+			Image bambooImage = getBamboosImage(); // TODO : tester
+			context.drawImage(bambooImage, x, y, x + getWidth(), y + getHeight(), 0,0, bambooImage.getWidth(), bambooImage.getHeight()); // TODO : tester
+		}
 	}
 
 	public boolean isFertile() {
@@ -171,6 +182,10 @@ public class Cell {
 
 	public int getBambooStage() {
 		return this.bambooStage;
+	}
+
+	public Image getBamboosImage(){
+		return this.bambooImages[this.bambooStage-1];
 	}
 
 	public int getBambooGauge() {

@@ -10,6 +10,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.state.StateBasedGame;
 
 public class Dino {
@@ -18,6 +19,9 @@ public class Dino {
 	private Image dino_down;
 	private Image gui;
 	private AppFont bambooFont;
+	private Audio eat;
+	private Audio splash;
+	private Audio regurgitate;
 
 	private int bambooCounter;
 	private int initialActionCountdown;
@@ -58,6 +62,9 @@ public class Dino {
 		this.dino = AppLoader.loadPicture("/images/bambooInvaders/dino.png");
 		this.dino_down = AppLoader.loadPicture("/images/bambooInvaders/dino_down.png");
 		this.gui = AppLoader.loadPicture("/images/bambooInvaders/GUI.png");
+		this.eat = AppLoader.loadAudio("/sounds/bambooInvaders/mange.ogg");
+		this.regurgitate = AppLoader.loadAudio("/sounds/bambooInvaders/regurgite.ogg");
+		this.splash = AppLoader.loadAudio("/sounds/bambooInvaders/splash.ogg");
 		this.bambooFont = AppLoader.loadFont(null, AppFont.BOLD, 42);
 	}
 
@@ -123,11 +130,15 @@ public class Dino {
 			if (cell == this.nest && this.bambooCounter > 0) {
 				isRegurgitating = true;
 				inAction = true;
+				if (this.timeRegurgitating == 0) {
+					this.regurgitate.playAsSoundEffect(1, .6f, false);
+				}
 			}
 			// Mange les bambous s'il y en a
 			else if (cell.getType() != 0){
 				int stage = cell.getBambooStage();
 				if (stage > 0) {
+					this.eat.playAsSoundEffect(1, .6f, false);
 					inAction = true;
 					cell.setBambooGauge(0);
 					cell.setBambooStage(0);
@@ -192,6 +203,9 @@ public class Dino {
 			this.nextJ = this.j;
 			return 0;
 		}
+		if (nextCell.getType() == 3) {
+			this.splash.playAsSoundEffect(1, .6f, false);
+		}
 		int cooldown = (int) (this.bambooCounter * this.countdownPerBamboo + grid.getCell(i, j).getDinoActionDuration() / grid.getCell(i, j).getDinoSpeedCoefficient()) ;
 		if (cooldown > 3000) cooldown = 3000;
 
@@ -225,6 +239,10 @@ public class Dino {
 		int x = (point.x * this.actionCountdown + nextPoint.x * (this.initialActionCountdown - this.actionCountdown)) / this.initialActionCountdown;
 		int y = (point.y * this.actionCountdown + nextPoint.y * (this.initialActionCountdown - this.actionCountdown)) / this.initialActionCountdown;
 		return new Point(x, y);
+	}
+
+	public int getScore() {
+		return this.score;
 	}
 
 	public Cell getNest() {

@@ -12,17 +12,17 @@ import org.newdawn.slick.state.transition.FadeOutTransition;
 import app.AppLoader;
 import app.AppPage;
 
-public class Death extends AppPage {
+public class WinMulti extends AppPage {
 
 	private Image background;
 	private Audio music;
 
-	public Death(int ID) {
+	public WinMulti(int ID) {
 		super(ID);
 	}
 
 	public void init(GameContainer container, StateBasedGame game) {
-		this.background = AppLoader.loadPicture("/images/bambooInvaders/death.png");
+		this.background = AppLoader.loadPicture("/images/bambooInvaders/win_multi.png");
 		this.music = AppLoader.loadAudio("/sounds/bambooInvaders/Le_bruit_dun_scorpion_qui_meurt.ogg");
 	}
 

@@ -6,18 +6,23 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
+import app.AppLoader;
+
 public class World extends BasicGameState {
 
+	private static int goalScore = 150; // Score to reach to win
 	private int ID;
 	private int state;
 	private Grid grid;
-	private Dino firstDino;
-	private Dino lastDino;
+	private Dino[] dinos; // 1 ou 2 dinos
+	private Audio worldMusic;
+	private float worldMusicPosition;
 
 	public World(int ID) {
 		this.ID = ID;
@@ -32,6 +37,7 @@ public class World extends BasicGameState {
 	@Override
 	public void init(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au chargement du programme */
+		this.worldMusic = AppLoader.loadAudio("/sounds/bambooInvaders/Tidal_Wave.ogg");
 	}
 
 	@Override
@@ -64,8 +70,33 @@ public class World extends BasicGameState {
 			game.enterState(2, new FadeOutTransition(), new FadeInTransition());
 		}
 		this.grid.update(container, game, delta);
-		this.firstDino.update(container, game, delta);
-		this.lastDino.update(container, game, delta);
+
+		for (Dino dino: dinos) {
+			dino.update(container, game, delta);
+		}
+
+		// Check winner/looser :
+		//TODO : loop through Dino check if a nest was bamboozled
+		//TODO : loop through Dino to check score
+		for (Dino dino: dinos) {
+			if(dino.getNest().getBambooStage() == 2){ // Si bambou adulte dans le nid du Dino
+				this.setState(3);
+				if (dinos.length == 1){
+					game.enterState(5 , new FadeOutTransition (), new FadeInTransition ()); // Death page (if only one Dino)
+				} else{
+					game.enterState(6 , new FadeOutTransition (), new FadeInTransition ()); // Win page with the other Dino as winner
+					//TODO : mettre l'autre Dino en winner
+				}
+			}
+		}
+
+		for (Dino dino: dinos) { // Check win by score
+			if(dino.getScore() / 1000 >= this.goalScore){
+				// TODO : launch win page with this dino as the winner. Reason : score
+				this.setState(3);
+				game.enterState(6 , new FadeOutTransition (), new FadeInTransition ());
+			}
+		}
 	}
 
 	@Override
@@ -73,16 +104,16 @@ public class World extends BasicGameState {
 		/* Méthode exécutée environ 60 fois par seconde */
 		int width = container.getWidth();
 		int height = container.getHeight();
-		Point firstPoint = this.firstDino.getPoint();
-		Point lastPoint = this.lastDino.getPoint();
+		Point firstPoint = this.dinos[0].getPoint();
+		Point lastPoint = this.dinos[1].getPoint();
 		context.setClip(0, 0, width / 2, height);
 		this.grid.render(container, game, context, firstPoint.x + width / 4, firstPoint.y);
-		this.lastDino.render(container, game, context, firstPoint.x - lastPoint.x - width / 4, firstPoint.y - lastPoint.y - height / 2, false);
-		this.firstDino.render(container, game, context, -width / 4, -height / 2, true);
+		this.dinos[1].render(container, game, context, firstPoint.x - lastPoint.x - width / 4, firstPoint.y - lastPoint.y - height / 2, false);
+		this.dinos[0].render(container, game, context, -width / 4, -height / 2, true);
 		context.setClip(width / 2, 0, width / 2, height);
 		this.grid.render(container, game, context, lastPoint.x - width / 4, lastPoint.y);
-		this.firstDino.render(container, game, context, lastPoint.x - firstPoint.x - width * 3 / 4, lastPoint.y - firstPoint.y - height / 2, false);
-		this.lastDino.render(container, game, context, -width * 3 / 4, -height / 2, true);
+		this.dinos[0].render(container, game, context, lastPoint.x - firstPoint.x - width * 3 / 4, lastPoint.y - firstPoint.y - height / 2, false);
+		this.dinos[1].render(container, game, context, -width * 3 / 4, -height / 2, true);
 		context.setClip(0, 0, width, height);
 		context.setColor(new Color(0, 0, 0));
 		context.setLineWidth(20);
@@ -91,20 +122,33 @@ public class World extends BasicGameState {
 
 	public void play(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au début du jeu */
-		this.firstDino = new Dino(grid, false);
-		this.lastDino = new Dino(grid, true);
+		if (!this.worldMusic.isPlaying()) {
+			this.worldMusic.playAsMusic(1, 0.8f, true);
+		}
+		this.dinos = new Dino[]{new Dino(grid, false), new Dino(grid, true)}; // TODO : gérer le cas d'un Dino en solo
 	}
 
 	public void pause(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée lors de la mise en pause du jeu */
+		if (this.worldMusic.isPlaying()) {
+			this.worldMusicPosition = this.worldMusic.getPosition();
+			this.worldMusic.stop();
+		}
 	}
 
 	public void resume(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée lors de la reprise du jeu */
+		if (!this.worldMusic.isPlaying()) {
+			this.worldMusic.playAsMusic(1, 0.8f, true);
+			this.worldMusic.setPosition(worldMusicPosition);
+		}
 	}
 
 	public void stop(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois à la fin du jeu */
+		if (this.worldMusic.isPlaying()) {
+			this.worldMusic.stop();
+		}
 	}
 
 	public void setState(int state) {

@@ -18,7 +18,7 @@ import java.awt.Point;
 
 public class World extends BasicGameState {
 
-	private static int goalScore = 150; // Score to reach to win
+	private static int goalScore = 1500; // Score to reach to win
 	private int ID;
 	private int state;
 	private Grid grid;
@@ -94,7 +94,7 @@ public class World extends BasicGameState {
 					game.enterState(5 , new FadeOutTransition (), new FadeInTransition ()); // Death page (if only one Dino)
 				} else{
 					this.winnerDino = 1 - i; // the other dino is the winner
-					this.winReason = "L'autre nid a été envahis par des bambous."; // Other nest bamboozled
+					this.winReason = "L'autre nid fut envahis par des bambous."; // Other nest bamboozled
 					game.enterState(7 , new FadeOutTransition (), new FadeInTransition ()); // WinMulti page with the other Dino as winner
 				}
 			}

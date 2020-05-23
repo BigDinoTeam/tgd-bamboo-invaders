@@ -1,7 +1,8 @@
 package games.bambooInvaders;
 
-import java.awt.*;
+import java.awt.Point;
 
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -72,15 +73,20 @@ public class World extends BasicGameState {
 		/* Méthode exécutée environ 60 fois par seconde */
 		int width = container.getWidth();
 		int height = container.getHeight();
-		context.setClip(0, 0, width / 2, height);
 		Point firstPoint = this.firstDino.getPoint();
-		this.grid.render(container, game, context, firstPoint.x + width / 4, firstPoint.y);
-		this.firstDino.render(container, game, context);
-		context.setClip(width / 2, 0, width / 2, height);
 		Point lastPoint = this.lastDino.getPoint();
+		context.setClip(0, 0, width / 2, height);
+		this.grid.render(container, game, context, firstPoint.x + width / 4, firstPoint.y);
+		this.lastDino.render(container, game, context, firstPoint.x - lastPoint.x - width / 4, firstPoint.y - lastPoint.y - height / 2, false);
+		this.firstDino.render(container, game, context, -width / 4, -height / 2, true);
+		context.setClip(width / 2, 0, width / 2, height);
 		this.grid.render(container, game, context, lastPoint.x - width / 4, lastPoint.y);
-		this.lastDino.render(container, game, context);
+		this.firstDino.render(container, game, context, lastPoint.x - firstPoint.x - width * 3 / 4, lastPoint.y - firstPoint.y - height / 2, false);
+		this.lastDino.render(container, game, context, -width * 3 / 4, -height / 2, true);
 		context.setClip(0, 0, width, height);
+		context.setColor(new Color(0, 0, 0));
+		context.setLineWidth(20);
+		context.drawLine(width / 2, 0, width / 2, height);
 	}
 
 	public void play(GameContainer container, StateBasedGame game) {

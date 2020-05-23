@@ -104,6 +104,12 @@ public class World extends BasicGameState {
 		/* Méthode exécutée environ 60 fois par seconde */
 		int width = container.getWidth();
 		int height = container.getHeight();
+		if (!this.grid.isMultiplayer()) {
+			Point point = this.dinos[0].getPoint();
+			this.grid.render(container, game, context, point.x, point.y);
+			this.dinos[0].render(container, game, context, -width / 2, -height / 2, true);
+			return;
+		}
 		Point firstPoint = this.dinos[0].getPoint();
 		Point lastPoint = this.dinos[1].getPoint();
 		context.setClip(0, 0, width / 2, height);
@@ -118,6 +124,7 @@ public class World extends BasicGameState {
 		context.setColor(new Color(0, 0, 0));
 		context.setLineWidth(20);
 		context.drawLine(width / 2, 0, width / 2, height);
+		context.setLineWidth(1);
 	}
 
 	public void play(GameContainer container, StateBasedGame game) {
@@ -125,7 +132,11 @@ public class World extends BasicGameState {
 		if (!this.worldMusic.isPlaying()) {
 			this.worldMusic.playAsMusic(1, 0.8f, true);
 		}
-		this.dinos = new Dino[]{new Dino(grid, false), new Dino(grid, true)}; // TODO : gérer le cas d'un Dino en solo
+		if (!this.grid.isMultiplayer()) {
+			this.dinos = new Dino[]{new Dino(grid, false)};
+			return;
+		}
+		this.dinos = new Dino[]{new Dino(grid, false), new Dino(grid, true)};
 	}
 
 	public void pause(GameContainer container, StateBasedGame game) {

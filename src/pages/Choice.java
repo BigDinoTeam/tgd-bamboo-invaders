@@ -28,9 +28,9 @@ public class Choice extends AppMenu {
 		this.setSubtitle("Niveaux");
 		List<MenuItem> menuItems = new ArrayList<MenuItem>();
 		for (String[] grid: Grid.getGrids()) {
-			menuItems.add(new MenuItem(grid[0]) {
+			menuItems.add(new MenuItem(grid[0] + (grid[1] != null ? " (2 joueurs)" : "")) {
 				public void itemSelected() {
-					((World) game.getState(3)).setGrid(new Grid(grid[0], grid[1]));
+					((World) game.getState(3)).setGrid(new Grid(grid[0], grid[1], grid[2]));
 					game.enterState(3, new FadeOutTransition(), new FadeInTransition());
 				}
 			});

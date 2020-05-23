@@ -2,6 +2,13 @@
 	{
 		"id": 0,
 		"name": "Delta",
-		"path": "/data/bambooInvaders/grids/delta.json"
+		"multiplayer": false,
+		"path": "/data/bambooInvaders/grids/delta.json",
+	},
+	{
+		"id": 0,
+		"name": "Delta",
+		"multiplayer": true,
+		"path": "/data/bambooInvaders/grids/delta.json",
 	}
 ]

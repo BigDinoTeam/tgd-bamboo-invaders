@@ -19,6 +19,7 @@ public class Grid {
 	private static String[][] grids;
 
 	private String name;
+	private boolean multiplayer;
 	private int width;
 	private int height;
 	private Cell[][] cells;
@@ -39,15 +40,19 @@ public class Grid {
 			try {
 				object = array.getJSONObject(i);
 			} catch (JSONException error) {}
-		   String name = "";
-		   try {
-			   name = object.getString("name");
-		   } catch (JSONException error) {}
+			String name = "";
+			try {
+				name = object.getString("name");
+			} catch (JSONException error) {}
+			String multiplayer = null;
+			try {
+				multiplayer = object.getBoolean("multiplayer") ? "" : null;
+			} catch (JSONException error) {}
 			String path = "";
 			try {
 				path = object.getString("path");
-			 } catch (JSONException error) {}
-			grids[i] = new String[]{name, path};
+			} catch (JSONException error) {}
+			grids[i] = new String[]{name, multiplayer, path};
 		}
 		Grid.grids = grids;
 	}
@@ -56,10 +61,11 @@ public class Grid {
 		return Grid.grids;
 	}
 
-	public Grid(String name, String path) {
+	public Grid(String name, String multiplayer, String path) {
 		this.x = (int) ((Cell.getSize() * sqrt(3)) / 2); //TODO : changer en fonction du positionnement de l'interface graphique
 		this.y = Cell.getSize(); //TODO : changer en fonction du positionnement de l'interface graphique
 		this.name = name;
+		this.multiplayer = multiplayer != null;
 		String json = AppLoader.loadData(path);
 		JSONObject object = new JSONObject();
 		try {
@@ -198,7 +204,7 @@ public class Grid {
 	public Point getHexagonCenter(int row, int col){
 		int x = (int) (Cell.getSize() * (sqrt(3) * col + sqrt(3) / 2 * row)) + this.x;
 		int y = (int) (Cell.getSize() * (3. / 2 * row)) + this.y;
-	    return new Point(x, y);
+		return new Point(x, y);
 	}
 
 	/**
@@ -234,6 +240,10 @@ public class Grid {
 			}
 		}
 		return new int[]{height, width};
+	}
+
+	public boolean isMultiplayer() {
+		return this.multiplayer;
 	}
 
 }

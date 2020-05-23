@@ -6,9 +6,15 @@
 		"path": "/data/bambooInvaders/grids/delta.json",
 	},
 	{
-		"id": 0,
-		"name": "Delta",
+		"id": 1,
+		"name": "Main River",
 		"multiplayer": true,
-		"path": "/data/bambooInvaders/grids/delta.json",
+		"path": "/data/bambooInvaders/grids/river.json",
+	},
+	{
+		"id": 2,
+		"name": "Small Conquest",
+		"multiplayer": true,
+		"path": "/data/bambooInvaders/grids/small_conquest.json",
 	}
 ]

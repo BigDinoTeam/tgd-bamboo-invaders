@@ -4,7 +4,9 @@ import app.AppLoader;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
@@ -23,6 +25,8 @@ public class World extends BasicGameState {
 	private Dino[] dinos; // 1 ou 2 dinos
 	private Audio worldMusic;
 	private float worldMusicPosition;
+	private Image worldBackground;
+	private Rectangle background;
 
 	private int winnerDino;
 	private String winReason; // Whether the winner win by score or by surviving longer than its opponent
@@ -42,6 +46,8 @@ public class World extends BasicGameState {
 	public void init(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au chargement du programme */
 		this.worldMusic = AppLoader.loadAudio("/sounds/bambooInvaders/Tidal_Wave.ogg");
+		this.worldBackground = AppLoader.loadPicture("/images/bambooInvaders/background.png");
+		this.background = new Rectangle(0, 0, container.getWidth(), container.getHeight());
 	}
 
 	@Override
@@ -113,6 +119,8 @@ public class World extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
+		context.texture(background, worldBackground, true);
+		
 		int width = container.getWidth();
 		int height = container.getHeight();
 		if (!this.grid.isMultiplayer()) {
@@ -183,6 +191,18 @@ public class World extends BasicGameState {
 
 	public void setGrid(Grid grid) {
 		this.grid = grid;
+	}
+
+	public int getWinnerDino() {
+		return winnerDino;
+	}
+
+	public String getWinReason() {
+		return winReason;
+	}
+
+	public Dino[] getDinos() {
+		return dinos;
 	}
 
 }

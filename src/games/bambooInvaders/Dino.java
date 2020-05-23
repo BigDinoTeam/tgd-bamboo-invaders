@@ -1,17 +1,22 @@
 package games.bambooInvaders;
 
+import app.AppFont;
 import app.AppLoader;
+
+import java.awt.Point;
+
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.state.StateBasedGame;
 
-import java.awt.*;
-
 public class Dino {
 
 	private Image dino;
+	private Image gui;
+	private AppFont bambooFont;
 
 	private int bambooCounter;
 	private int actionCountdown;
@@ -22,7 +27,7 @@ public class Dino {
 	private boolean isRegurgitating;
 	private int timeRegurgitating;
 
-	private final int timeRegurgiteBamboo = 50; // 50 ms
+	private final int timeRegurgiteBamboo = 150; // 150 ms
 	private final int countdownPerBamboo = 50; // 50 ms
 
 	public Dino(Grid grid) {
@@ -36,6 +41,8 @@ public class Dino {
 		this.timeRegurgitating = 0;
 		this.isRegurgitating = false;
 		this.dino = AppLoader.loadPicture("/images/bambooInvaders/dino.png");
+		this.gui = AppLoader.loadPicture("/images/bambooInvaders/GUI.png");
+		this.bambooFont = AppLoader.loadFont(null, AppFont.BOLD, 42);
 	}
 
 	public void update(GameContainer container, StateBasedGame game, int delta) {
@@ -55,14 +62,25 @@ public class Dino {
 					(float) p.getX() - Cell.getWidth()/3, (float) p.getY() - Cell.getHeight()/3, (float) p.getX() + Cell.getWidth()/3, (float) p.getY() + Cell.getHeight()/3,
 					0, 0, dino.getWidth(), dino.getHeight()
 				);
-
 		// TODO : animation de déplacement ?
+		
+		context.drawImage(
+				gui,
+				0, container.getHeight() - gui.getHeight(),
+				0, 0, gui.getWidth(), gui.getHeight()
+			);
+		context.setFont(bambooFont);
+		context.setColor(new Color(0x5c913b));
+		context.drawString(""+this.bambooCounter, 175, container.getHeight() - gui.getHeight() + 6);
+		context.resetFont();
+		context.setColor(new Color(0x565656));
+		context.drawString("Score : "+this.score/1000, 125, container.getHeight() - gui.getHeight() + 72);
 	}
 
 	private int checkInput(GameContainer container, int delta) {
 		Input input = container.getInput();
 
-		if (this.isRegurgitating) {
+		if (this.isRegurgitating  && this.bambooCounter > 0) {
 			regurgitate(delta);
 		}
 		this.isRegurgitating = false;
@@ -70,7 +88,7 @@ public class Dino {
 		if (input.isKeyDown(Input.KEY_S)) {
 			// Regurgite si dans un nid
 			Cell cell = grid.getCell(i, j);
-			if (cell.getType() == 0) {
+			if (cell.getType() == 0  && this.bambooCounter > 0) {
 				isRegurgitating = true;
 			}
 			// Mange les bambous s'il y en a
@@ -149,7 +167,7 @@ public class Dino {
 	private void regurgitate(int delta) {
 		if (delta > 0) {
 			this.timeRegurgitating += delta;
-			while (this.timeRegurgitating > this.timeRegurgiteBamboo) {
+			while (this.timeRegurgitating > this.timeRegurgiteBamboo && this.bambooCounter > 0) {
 				this.timeRegurgitating -= this.timeRegurgiteBamboo;
 				this.bambooCounter -= 1;
 				this.score += 3000;

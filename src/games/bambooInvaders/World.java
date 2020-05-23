@@ -1,5 +1,7 @@
 package games.bambooInvaders;
 
+import java.awt.*;
+
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
@@ -8,15 +10,14 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.state.transition.FadeInTransition;
 import org.newdawn.slick.state.transition.FadeOutTransition;
 
-import java.awt.*;
-
 public class World extends BasicGameState {
 
 	private static int goalScore = 150; // Score to reach to win
 	private int ID;
 	private int state;
 	private Grid grid;
-	private Dino dino;
+	private Dino firstDino;
+	private Dino lastDino;
 
 	public World(int ID) {
 		this.ID = ID;
@@ -63,7 +64,8 @@ public class World extends BasicGameState {
 			game.enterState(2, new FadeOutTransition(), new FadeInTransition());
 		}
 		this.grid.update(container, game, delta);
-		this.dino.update(container, game, delta);
+		this.firstDino.update(container, game, delta);
+		this.lastDino.update(container, game, delta);
 
 		// Check winner/looser :
 		//TODO : loop through Dino check if a nest was bamboozled
@@ -78,14 +80,23 @@ public class World extends BasicGameState {
 	@Override
 	public void render(GameContainer container, StateBasedGame game, Graphics context) {
 		/* Méthode exécutée environ 60 fois par seconde */
-		Point point = this.dino.getPoint();
-		this.grid.render(container, game, context, point.x, point.y);
-		this.dino.render(container, game, context);
+		int width = container.getWidth();
+		int height = container.getHeight();
+		context.setClip(0, 0, width / 2, height);
+		Point firstPoint = this.firstDino.getPoint();
+		this.grid.render(container, game, context, firstPoint.x + width / 4, firstPoint.y);
+		this.firstDino.render(container, game, context);
+		context.setClip(width / 2, 0, width / 2, height);
+		Point lastPoint = this.lastDino.getPoint();
+		this.grid.render(container, game, context, lastPoint.x - width / 4, lastPoint.y);
+		this.lastDino.render(container, game, context);
+		context.setClip(0, 0, width, height);
 	}
 
 	public void play(GameContainer container, StateBasedGame game) {
 		/* Méthode exécutée une unique fois au début du jeu */
-		this.dino = new Dino(grid);
+		this.firstDino = new Dino(grid, false);
+		this.lastDino = new Dino(grid, true);
 	}
 
 	public void pause(GameContainer container, StateBasedGame game) {
